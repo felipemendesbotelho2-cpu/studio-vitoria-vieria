@@ -18,7 +18,10 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);font-weight:300;background:var(--bg);color:var(--text);line-height:1.6;position:relative}
+body{font-family:var(--sans);font-weight:300;background:
+    linear-gradient(180deg,rgba(250,245,235,.93),rgba(245,237,219,.95)),
+    url('https://images.unsplash.com/photo-1619607146034-5a05296c8f9a?auto=format&fit=crop&w=2400&q=80') center/cover fixed no-repeat;
+  color:var(--text);line-height:1.6;position:relative}
 body::before{
   content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
@@ -41,10 +44,31 @@ header{position:sticky;top:0;z-index:50;background:rgba(250,246,236,.92);backdro
 nav{display:flex;gap:26px;color:#604d57;font-size:14px;font-weight:600}
 .nav-btn,.hero-btn{background:var(--primary);color:#fff;padding:12px 19px;border-radius:999px;font-weight:700;border:0;cursor:pointer}
 .nav-btn:hover,.hero-btn:hover{background:var(--primary-dark)}
+.catalog-nav-link{background:var(--soft);color:var(--primary-dark);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;border:1px solid #e0cd9e;white-space:nowrap}
+.catalog-nav-link:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 .hero{padding:72px 0 58px}
 #info-strip{padding:0 0 50px}
 .hero-grid{display:grid;grid-template-columns:1fr .85fr;gap:40px;align-items:start}
 .badge{display:inline-flex;padding:8px 15px;border-radius:999px;background:var(--soft);color:var(--primary-dark);font-size:13px;font-weight:500;margin-bottom:18px;letter-spacing:.3px}
+.day-agenda{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px 22px 16px;box-shadow:0 8px 30px rgba(103,55,78,.05);margin-bottom:18px;position:relative;overflow:hidden}
+.day-agenda::before{content:"";position:absolute;top:-50px;right:-50px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--soft) 0%,transparent 70%)}
+.day-agenda-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;position:relative}
+.day-agenda-eyebrow{display:block;font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary-dark);font-weight:700;margin-bottom:3px}
+.day-agenda-date{font-family:var(--serif);font-size:23px;font-weight:600}
+.day-agenda-legend{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.day-agenda-legend .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-left:9px}
+.day-agenda-legend .dot:first-child{margin-left:0}
+.day-agenda-legend .dot.free{background:var(--success)}
+.day-agenda-legend .dot.busy{background:#c0392b}
+.day-agenda-timeline{max-height:270px;overflow-y:auto;position:relative;padding-left:4px}
+.day-agenda-timeline::before{content:"";position:absolute;left:14px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.da-slot{display:flex;align-items:center;gap:14px;padding:7px 0;position:relative}
+.da-dot{width:13px;height:13px;border-radius:50%;background:var(--success);border:3px solid var(--card);box-shadow:0 0 0 1px var(--success);flex-shrink:0;z-index:1;margin-left:8px}
+.da-slot.busy .da-dot{background:#c0392b;box-shadow:0 0 0 1px #c0392b}
+.da-time{font-size:13.5px;font-weight:800;width:52px;flex-shrink:0}
+.da-status{font-size:12px;color:var(--success);font-weight:600}
+.da-slot.busy .da-status{color:#c0392b}
+.da-loading{color:var(--muted);font-size:13px;text-align:center;padding:14px 0}
 h1{font-family:var(--serif);font-weight:600;font-size:clamp(42px,6vw,68px);line-height:1.05;letter-spacing:-1px;margin-bottom:20px}
 h1 span{font-style:italic;color:var(--primary-dark)}
 .hero p{font-size:18px;color:var(--muted);max-width:570px;margin-bottom:28px}
@@ -119,6 +143,15 @@ h2{font-family:var(--serif);font-size:42px;margin:5px 0 8px}
 .day:hover{border-color:var(--primary)}.day.empty{border:0;background:transparent;cursor:default}
 .day.selected{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:800}
 .day.disabled{color:#cdbdc5;background:#faf6f8;cursor:not-allowed}
+.day.available{background:#eef8f1;border-color:#bfe3cc;color:#2f7a4d;font-weight:700}
+.day.available:hover{border-color:var(--success)}
+.day.full{background:#fbe8e6;border-color:#f3c8c4;color:#c0392b;font-weight:700}
+.day.selected{background:var(--primary)!important;color:#fff!important;border-color:var(--primary)!important;font-weight:800!important}
+.calendar-legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted);margin:10px 2px 4px}
+.calendar-legend span{display:inline-flex;align-items:center;gap:5px}
+.calendar-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.calendar-legend .free i{background:var(--success)}
+.calendar-legend .busy i{background:#c0392b}
 .booking-form{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 label{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:#624f58}
@@ -156,6 +189,10 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 .admin-cancel-btn{border:0;background:#c0392b;color:#fff;padding:6px 10px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:500;flex-shrink:0}
 .admin-cancel-btn:hover{background:#a5301f}
 .admin-empty{color:var(--muted);font-size:12px;text-align:center;padding:14px 0}
+.admin-day-sep{display:flex;align-items:center;gap:8px;margin:14px 0 8px}
+.admin-day-sep:first-child{margin-top:0}
+.admin-day-sep span{font-size:11.5px;font-weight:800;color:var(--primary-dark);letter-spacing:.3px;white-space:nowrap}
+.admin-day-sep::after{content:"";flex:1;height:1px;background:var(--line)}
 .toast{position:fixed;right:20px;bottom:20px;background:#fff;border:1px solid var(--line);padding:15px 18px;border-radius:15px;box-shadow:var(--shadow);display:none;z-index:100}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(35,26,16,.55);z-index:200;align-items:center;justify-content:center;padding:18px}
 .modal-overlay.open{display:flex}
@@ -183,8 +220,8 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 <header>
   <div class="container nav">
     <a class="logo" href="#"><span class="logo-mark">V</span> Vitória Vieira</a>
+    <a class="catalog-nav-link" href="#catalogo-servicos">Catálogo de serviços</a>
     <nav><a href="#agenda">Serviços</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#contato">Contato</a></nav>
-    <a class="nav-btn" href="#agenda">Agendar horário</a>
   </div>
 </header>
 
@@ -214,7 +251,16 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 <section class="hero" id="agenda">
   <div class="container hero-grid">
     <div>
-      <span class="badge">Agenda</span>
+      <div class="day-agenda" id="dayAgenda">
+        <div class="day-agenda-head">
+          <div>
+            <span class="day-agenda-eyebrow">Agenda do dia</span>
+            <h3 class="day-agenda-date" id="dayAgendaDate">Hoje</h3>
+          </div>
+          <div class="day-agenda-legend"><span class="dot free"></span>Livre<span class="dot busy"></span>Ocupado</div>
+        </div>
+        <div class="day-agenda-timeline" id="dayAgendaList"></div>
+      </div>
       <div class="howto">
         <strong>Como agendar em 3 passos</strong>
         <ol>
@@ -229,6 +275,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
         </div>
         <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
         <div class="days" id="days"></div>
+        <div class="calendar-legend"><span class="free"><i></i>Dia com horários livres</span><span class="busy"><i></i>Dia lotado</span></div>
         <div class="time-popover" id="timePopover">
           <div class="tp-head"><h4>Horários — <span id="tpDate"></span></h4><button type="button" class="tp-close" onclick="closeTimePopover()">✕</button></div>
           <div class="tp-slots" id="tpSlots"></div>
@@ -247,7 +294,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
           <input type="hidden" id="phone">
         </div>
       </div>
-    <div class="catalog-card">
+    <div class="catalog-card" id="catalogo-servicos">
       <div class="catalog-eyebrow">Nossos serviços</div>
       <h3>Catálogo de serviços</h3>
       <p>Toque em um serviço para já marcá-lo no seu agendamento ao lado.</p>
@@ -336,19 +383,35 @@ let current=new Date(); current.setDate(1);
 let selected=null;
 const today=new Date(); today.setHours(0,0,0,0);
 
-function renderCalendar(){
+async function fetchAllBookings(){
+ if(!SHEET_API_URL) return [];
+ try{
+   const res=await fetch(SHEET_API_URL);
+   return await res.json();
+ }catch(err){ console.error("Erro ao buscar agendamentos:",err); return []; }
+}
+async function renderCalendar(){
  const y=current.getFullYear(), m=current.getMonth();
  document.getElementById("monthTitle").textContent=monthNames[m]+" "+y;
  const days=document.getElementById("days"); days.innerHTML="";
  const first=new Date(y,m,1).getDay();
  const total=new Date(y,m+1,0).getDate();
+ const totalSlots=generateSlots().length;
+ const allBookings=await fetchAllBookings();
+ const countByDate={};
+ allBookings.forEach(b=>{ if(b.status==="Cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
  for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";days.appendChild(e)}
  for(let d=1;d<=total;d++){
    let date=new Date(y,m,d);date.setHours(0,0,0,0);
    let b=document.createElement("button");b.className="day";b.textContent=d;
    const isPast=date<today, isSunday=date.getDay()===0;
-   if(isPast||isSunday)b.classList.add("disabled");
-   else b.onclick=()=>selectDate(date);
+   if(isPast||isSunday){
+     b.classList.add("disabled");
+   }else{
+     const count=countByDate[isoDate(date)]||0;
+     b.classList.add(count>=totalSlots?"full":"available");
+     b.onclick=()=>selectDate(date);
+   }
    if(selected&&date.getTime()===selected.getTime())b.classList.add("selected");
    days.appendChild(b);
  }
@@ -366,6 +429,7 @@ function selectDate(date){
  document.getElementById("time").value="";
  renderCalendar();
  openTimePopover();
+ renderDayAgenda(date);
 }
 function generateSlots(){
  const arr=[];
@@ -379,7 +443,7 @@ async function fetchBookedTimes(date){
    const iso=isoDate(date);
    const res=await fetch(SHEET_API_URL);
    const data=await res.json();
-   return data.filter(r=>r.date===iso).map(r=>r.time);
+   return data.filter(r=>r.date===iso && r.status!=="Cancelado").map(r=>r.time);
  }catch(err){ console.error("Erro ao buscar horários ocupados:",err); return []; }
 }
 function renderSlots(){
@@ -451,6 +515,8 @@ async function book(){
        openTimePopover();
        return;
      }
+     renderCalendar();
+     renderDayAgenda(selected);
    }catch(err){
      btn.textContent=original; btn.disabled=false;
      console.error("Erro ao gravar agendamento na planilha:",err);
@@ -464,14 +530,32 @@ async function book(){
 function finalizeWhatsapp(){
  const date=document.getElementById("dateField").value,name=document.getElementById("name").value;
  const phone=document.getElementById("phone").value,time=document.getElementById("time").value,service=document.getElementById("service").value;
- const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
- const message=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.\n\n*Nome:* ${name}\n*Data:* ${date}\n*Horário:* ${time}\n*Serviço:* ${service}\n*Valor:* ${price}\n*WhatsApp da cliente:* ${phone}`;
+ const price=servicePrices[service]?`R$${servicePrices[service]},00`:"a combinar";
+ const message=`✅*Horário marcado*\n-As ${time}\n-Dia ${date}\n*Procedimento* ${service}\n*Cliente* ${name}\n*Valor:* ${price}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
  window.location.href=`https://wa.me/${number}?text=${encodeURIComponent(message)}`;
  closeBookingModal();
 }
+async function renderDayAgenda(date){
+ const list=document.getElementById("dayAgendaList");
+ const dateLabel=document.getElementById("dayAgendaDate");
+ const d=new Date(date); d.setHours(0,0,0,0);
+ const isToday=d.getTime()===today.getTime();
+ dateLabel.textContent=(isToday?"Hoje — ":"")+d.toLocaleDateString("pt-BR");
+ list.innerHTML='<div class="da-loading">Carregando agenda...</div>';
+ const booked=await fetchBookedTimes(d);
+ list.innerHTML="";
+ generateSlots().forEach(t=>{
+   const busy=booked.includes(t);
+   const row=document.createElement("div");
+   row.className="da-slot"+(busy?" busy":"");
+   row.innerHTML=`<span class="da-dot"></span><span class="da-time">${t}</span><span class="da-status">${busy?"Ocupado":"Disponível"}</span>`;
+   list.appendChild(row);
+ });
+}
 document.getElementById("whatsapp").href=`https://wa.me/5563993008899?text=${encodeURIComponent("Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.")}`;
 renderCalendar();
+renderDayAgenda(today);
 
 // ====== ÁREA DA PROFISSIONAL ======
 let adminKey=null;
@@ -512,16 +596,31 @@ function waDigits(phone){
  if(d.length<=11)d="55"+d;
  return d;
 }
+function formatDateBR(iso){
+ if(!iso) return iso;
+ const parts=String(iso).split("-");
+ if(parts.length!==3) return iso;
+ return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
 function renderAdminBookings(items){
  const list=document.getElementById("adminList");
  list.innerHTML="";
  if(!items||items.length===0){ list.innerHTML='<div class="admin-empty">Nenhum agendamento ainda.</div>'; return; }
  items.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
+ let lastDate=null;
  items.forEach(item=>{
+   if(item.date!==lastDate){
+     lastDate=item.date;
+     const sep=document.createElement("div");
+     sep.className="admin-day-sep";
+     sep.innerHTML=`<span>📅 ${formatDateBR(item.date)}</span>`;
+     list.appendChild(sep);
+   }
    const cancelled=item.status==="Cancelado";
+   const price=servicePrices[item.service]?`R$${servicePrices[item.service]},00`:"a combinar";
    const row=document.createElement("div");
    row.className="admin-row"+(cancelled?" cancelled":"");
-   row.innerHTML=`<div><strong>${item.name}</strong><br>📅 ${item.date} — ⏰ ${item.time}<br>💅 ${item.service}<br>📱 <a href="https://wa.me/${waDigits(item.phone)}" target="_blank" style="color:var(--primary-dark);text-decoration:underline">${item.phone||"-"}</a><br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
+   row.innerHTML=`<div>✅<strong>Horário marcado</strong><br>-As ${item.time}<br>-Dia ${formatDateBR(item.date)}<br><strong>Procedimento</strong> ${item.service}<br><strong>Cliente</strong> ${item.name}<br><strong>Valor:</strong> ${price}<br>📱 <a href="https://wa.me/${waDigits(item.phone)}" target="_blank" style="color:var(--primary-dark);text-decoration:underline">${item.phone||"-"}</a><br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
    if(!cancelled){
      const btn=document.createElement("button");
      btn.className="admin-cancel-btn"; btn.textContent="Cancelar";
@@ -536,7 +635,7 @@ async function cancelBooking(row){
  try{
    const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({action:"cancel",key:adminKey,row})});
    const result=await res.json();
-   if(result.success){ showToast("Agendamento cancelado. Horário liberado!"); loadAdminBookings(); }
+   if(result.success){ showToast("Agendamento cancelado. Horário liberado!"); loadAdminBookings(); renderCalendar(); renderDayAgenda(selected||today); }
    else{ showToast(result.message||"Não foi possível cancelar."); }
  }catch(err){
    console.error("Erro ao cancelar:",err);
