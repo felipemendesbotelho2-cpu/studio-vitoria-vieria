@@ -453,12 +453,12 @@ function finalizeWhatsapp(){
  const date=document.getElementById("dateField").value,name=document.getElementById("name").value;
  const phone=document.getElementById("phone").value,time=document.getElementById("time").value,service=document.getElementById("service").value;
  const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
- const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*Valor:* ${encodeURIComponent(price)}%0A*WhatsApp da cliente:* ${encodeURIComponent(phone)}`;
+ const message=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.\n\n*Nome:* ${name}\n*Data:* ${date}\n*Horário:* ${time}\n*Serviço:* ${service}\n*Valor:* ${price}\n*WhatsApp da cliente:* ${phone}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
- window.location.href=`https://wa.me/${number}?text=${text}`;
+ window.location.href=`https://wa.me/${number}?text=${encodeURIComponent(message)}`;
  closeBookingModal();
 }
-document.getElementById("whatsapp").href="https://wa.me/5563993008899?text=Olá!%20Quero%20agendar%20um%20horário%20na%20Vitória%20Vieira%20Nails%20%26%20Spa.";
+document.getElementById("whatsapp").href=`https://wa.me/5563993008899?text=${encodeURIComponent("Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.")}`;
 renderCalendar();
 
 // ====== ÁREA DA PROFISSIONAL ======
