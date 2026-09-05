@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitória Vieira Nails & Spa</title>
+<meta name="description" content="Dê um up no seu visual. Agende seu horário na Vitória Vieira Nails & Spa e conheça nosso catálogo de serviços.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf5eb; --card:#fffdf9; --text:#2b2116; --muted:#8c7c68;
+  --primary:#b3894f; --primary-dark:#8c6a39; --soft:#f1e4cc;
+  --line:#e8dcc3; --success:#4c9a70; --dark:#231a10;
+  --shadow:0 18px 50px rgba(60,44,20,.14);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Jost',system-ui,-apple-system,Segoe UI,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);font-weight:300;background:var(--bg);color:var(--text);line-height:1.6}
+a{text-decoration:none;color:inherit}
+button,input,select{font:inherit}
+.container{width:min(1120px,92%);margin:auto}
+header{position:sticky;top:0;z-index:50;background:rgba(255,248,251,.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(236,216,225,.8)}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.logo-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#f0d9a8,var(--primary) 70%);color:#3a2b12;font-family:var(--serif);font-style:italic;font-size:24px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+nav{display:flex;gap:26px;color:#604d57;font-size:14px;font-weight:600}
+.nav-btn,.hero-btn{background:var(--primary);color:#fff;padding:12px 19px;border-radius:999px;font-weight:700;border:0;cursor:pointer}
+.nav-btn:hover,.hero-btn:hover{background:var(--primary-dark)}
+.hero{padding:72px 0 58px}
+#info-strip{padding:0 0 50px}
+.hero-grid{display:grid;grid-template-columns:1fr .85fr;gap:40px;align-items:start}
+.badge{display:inline-flex;padding:8px 15px;border-radius:999px;background:var(--soft);color:var(--primary-dark);font-size:13px;font-weight:500;margin-bottom:18px;letter-spacing:.3px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(42px,6vw,68px);line-height:1.05;letter-spacing:-1px;margin-bottom:20px}
+h1 span{font-style:italic;color:var(--primary-dark)}
+.hero p{font-size:18px;color:var(--muted);max-width:570px;margin-bottom:28px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.secondary{padding:12px 19px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:700}
+.hero-card{background:var(--dark);min-height:520px;border-radius:34px;box-shadow:var(--shadow);position:relative;overflow:hidden;display:grid;place-items:center;border:1px solid #40331e}
+.hero-card img{width:100%;height:100%;object-fit:cover;opacity:.92}
+.hero-card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(20,15,8,.55),rgba(20,15,8,0) 45%)}
+.floating{position:absolute;background:var(--card);padding:13px 17px;border-radius:16px;box-shadow:var(--shadow);font-size:13px;font-weight:500;color:var(--text);z-index:2;border:1px solid var(--line)}
+.float1{top:28px;left:22px}.float2{right:20px;bottom:28px}
+section{padding:65px 0}
+.section-head{text-align:center;margin-bottom:32px}
+.section-head .eyebrow{color:var(--primary);font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+h2{font-family:var(--serif);font-size:42px;margin:5px 0 8px}
+.section-head p{color:var(--muted)}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.service{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 8px 30px rgba(103,55,78,.05);transition:.2s}
+.service:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.service-icon{font-size:30px;margin-bottom:15px}
+.service h3{font-size:19px;margin-bottom:7px}.service p{font-size:14px;color:var(--muted);min-height:43px}
+.price{font-size:21px;font-weight:900;color:var(--primary);margin-top:17px}
+.duration{font-size:12px;color:#927986;margin-left:7px;font-weight:600}
+.booking-wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:25px;align-items:start}
+.booking-info,.calendar-box{background:#fff;border:1px solid var(--line);border-radius:25px;padding:28px;box-shadow:0 8px 30px rgba(103,55,78,.05)}
+.booking-info h3{font-family:var(--serif);font-size:28px;margin-bottom:10px}
+.booking-info p{color:var(--muted);margin-bottom:18px}
+.info-list{display:grid;gap:13px}.info-list div{padding:13px;background:var(--bg);border-radius:14px;font-size:14px}
+.calendar-box{position:relative}
+.catalog-card{background:var(--card);border:1px solid var(--line);border-radius:34px;box-shadow:var(--shadow);padding:32px;min-height:520px;position:relative;overflow:hidden}
+.catalog-card::before{content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,var(--soft) 0%,transparent 70%)}
+.catalog-eyebrow{font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary-dark);font-weight:600;margin-bottom:6px}
+.catalog-card h3{font-family:var(--serif);font-weight:600;font-size:25px;margin-bottom:4px;position:relative}
+.catalog-card>p{color:var(--muted);font-size:13.5px;margin-bottom:22px;position:relative}
+.catalog-list{display:grid;gap:9px;position:relative}
+.catalog-item{display:flex;align-items:center;gap:13px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--bg);cursor:pointer;transition:border-color .15s,background .15s,box-shadow .15s,transform .15s}
+.catalog-item:hover{border-color:var(--primary);box-shadow:0 8px 20px rgba(60,44,20,.08);transform:translateY(-1px)}
+.catalog-item.active{background:var(--soft);border-color:var(--primary);box-shadow:0 8px 20px rgba(60,44,20,.1)}
+.ci-icon{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f6e6c4,var(--soft) 75%);display:grid;place-items:center;color:var(--primary-dark);flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(179,137,79,.25);transition:background .15s,color .15s}
+.ci-icon svg{width:19px;height:19px}
+.catalog-item.active .ci-icon{background:radial-gradient(circle at 35% 30%,#e7c98a,var(--primary) 75%);color:#fff;box-shadow:none}
+.catalog-item span{font-size:13.5px;font-weight:500;line-height:1.3}
+.catalog-note{margin-top:16px;font-size:12.5px;color:var(--muted);position:relative}
+.time-popover{display:none;position:absolute;top:64px;left:8px;right:8px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;z-index:30}
+.time-popover.open{display:block}
+.tp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.tp-head h4{font-family:var(--serif);font-weight:600;font-size:17px}
+.tp-close{border:0;background:var(--soft);color:var(--primary-dark);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px}
+.tp-slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:190px;overflow-y:auto;margin-bottom:14px}
+.tp-slot{border:1px solid var(--line);background:var(--bg);color:var(--text);padding:9px 0;border-radius:10px;font-size:13px;cursor:pointer}
+.tp-slot:hover{border-color:var(--primary)}
+.tp-slot.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600}
+.tp-slot.taken{background:#efe9dd;color:#a99b85;cursor:not-allowed;text-decoration:line-through}
+.tp-loading{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px;padding:14px 0}
+.tp-custom{border-top:1px solid var(--line);padding-top:12px}
+.tp-custom label{font-size:12px;color:var(--muted);display:block;margin-bottom:8px}
+.tp-custom-row{display:flex;gap:8px}
+.tp-custom-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:10px;font-family:var(--sans)}
+.tp-confirm{border:0;background:var(--primary);color:#fff;padding:0 16px;border-radius:10px;cursor:pointer;font-weight:500}
+.tp-confirm:hover{background:var(--primary-dark)}
+.calendar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.calendar-top h3{font-size:19px}
+.month-btn{border:1px solid var(--line);background:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer}
+.weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.weekdays div{text-align:center;font-size:11px;color:#a08792;font-weight:800;padding:6px 0}
+.day{min-height:43px;border:1px solid #f0e3e8;background:#fff;border-radius:10px;cursor:pointer;color:var(--text)}
+.day:hover{border-color:var(--primary)}.day.empty{border:0;background:transparent;cursor:default}
+.day.selected{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:800}
+.day.disabled{color:#cdbdc5;background:#faf6f8;cursor:not-allowed}
+.booking-form{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:12px;font-weight:800;margin-bottom:5px;color:#624f58}
+input,select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#fff;outline:none}
+input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(200,91,135,.10)}
+.full{grid-column:1/-1}
+.submit{margin-top:13px;width:100%;padding:14px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-weight:900;cursor:pointer}
+.submit:hover{background:var(--primary-dark)}
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.g-item{height:230px;border-radius:20px;display:flex;align-items:end;padding:18px;color:#fff;font-family:var(--serif);font-size:19px;font-weight:600;overflow:hidden;background:linear-gradient(145deg,#c9a45f,#5c451f)}
+.g-item:nth-child(2){background:linear-gradient(145deg,#e3cb9a,#8a6a37)}
+.g-item:nth-child(3){background:linear-gradient(145deg,#f0e2c4,#a5824c)}
+.g-item:nth-child(4){background:linear-gradient(145deg,#d8b878,#40301a)}
+.contact{background:var(--dark);color:#fff;border-radius:30px;padding:44px;display:flex;align-items:center;justify-content:space-between;gap:30px;border:1px solid #40331e}
+.contact p{color:#cbbb9d}.contact .hero-btn{background:#fff;color:var(--primary-dark)}
+footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family:var(--serif);letter-spacing:.5px}
+.toast{position:fixed;right:20px;bottom:20px;background:#fff;border:1px solid var(--line);padding:15px 18px;border-radius:15px;box-shadow:var(--shadow);display:none;z-index:100}
+@media(max-width:800px){
+ nav{display:none}.hero-grid,.booking-wrap{grid-template-columns:1fr}.hero{padding-top:42px}.hero-card{min-height:350px}
+ .services{grid-template-columns:1fr 1fr}.gallery{grid-template-columns:1fr 1fr}.contact{flex-direction:column;align-items:flex-start}
+ #info-strip .info-list{grid-template-columns:1fr!important}
+}
+@media(max-width:520px){
+ .services{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}.g-item{height:180px}
+ h2{font-size:34px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="logo" href="#"><span class="logo-mark">V</span> Vitória Vieira</a>
+    <nav><a href="#servicos">Serviços</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#contato">Contato</a></nav>
+    <a class="nav-btn" href="#agenda">Agendar horário</a>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="agenda">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge">Agenda</span>
+      <h2 style="margin:10px 0 8px;font-size:30px">Marque em poucos cliques</h2>
+      <p style="color:var(--muted);font-size:15px;max-width:420px;margin-bottom:4px">Escolha um dia disponível no calendário, defina o horário, o serviço desejado e envie seus dados — a confirmação é feita direto pelo WhatsApp.</p>
+      <div class="calendar-box" style="margin-top:16px">
+        <div class="calendar-top">
+          <button class="month-btn" id="prev">‹</button><h3 id="monthTitle"></h3><button class="month-btn" id="next">›</button>
+        </div>
+        <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
+        <div class="days" id="days"></div>
+        <div class="time-popover" id="timePopover">
+          <div class="tp-head"><h4>Horários — <span id="tpDate"></span></h4><button type="button" class="tp-close" onclick="closeTimePopover()">✕</button></div>
+          <div class="tp-slots" id="tpSlots"></div>
+          <div class="tp-custom">
+            <label>Prefere outro horário? Ajuste manualmente</label>
+            <div class="tp-custom-row">
+              <input type="time" id="customTime">
+              <button type="button" class="tp-confirm" onclick="confirmCustomTime()">Usar</button>
+            </div>
+          </div>
+        </div>
+        <div class="booking-form">
+          <div class="form-grid">
+            <div><label>Data escolhida</label><input id="dateField" readonly placeholder="Selecione no calendário"></div>
+            <div><label>Horário</label><input id="time" readonly placeholder="Selecione no calendário" style="cursor:pointer" onclick="if(selected)openTimePopover()"></div>
+            <div><label>Seu nome</label><input id="name" placeholder="Digite seu nome"></div>
+            <div><label>WhatsApp</label><input id="phone" placeholder="(63) 99999-9999"></div>
+            <div class="full"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option>Manicure + Esmaltação em Gel</option><option>Manicure e Pedicure Tradicional</option><option>Manicure</option><option>Pedicure</option><option>Alongamento Molde F1</option><option>Banho de Gel</option><option>Spa dos Pés Relaxante</option><option>Plástica dos Pés — Remoção de Rachaduras</option></select></div>
+          </div>
+          <button class="submit" onclick="book()">Confirmar agendamento</button>
+        </div>
+      </div>
+      <a class="secondary" href="#servicos" style="display:inline-block;margin-top:16px">Ver catálogo de serviços</a>
+    </div>
+    <div class="catalog-card">
+      <div class="catalog-eyebrow">Nossos serviços</div>
+      <h3>Catálogo de serviços</h3>
+      <p>Toque em um serviço para já marcá-lo no seu agendamento ao lado.</p>
+      <div class="catalog-list" id="catalogList">
+        <div class="catalog-item" onclick="pickService(this,'Manicure + Esmaltação em Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v3l-2 2v3h-2V7L9 5V2z"/><rect x="7" y="10" width="10" height="11" rx="2.5"/></svg></div><span>Manicure + Esmaltação em Gel</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Manicure e Pedicure Tradicional')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9.8A4 4 0 0112 7.6 4 4 0 0119 10.2c0 5.5-7 9.8-7 9.8z"/><path d="M12 4.5v2M9.3 4l.5 1.6M14.7 4l-.5 1.6"/></svg></div><span>Manicure e Pedicure Tradicional</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Manicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 12.5V6a1.3 1.3 0 012.6 0v5"/><path d="M10.1 11.5V4.3a1.3 1.3 0 012.6 0v7.2"/><path d="M12.7 12V6a1.3 1.3 0 012.6 0v7"/><path d="M15.3 13V8a1.3 1.3 0 012.6 0v6.5c0 3.6-2.3 6.5-5.7 6.5s-5.7-2.3-6.2-5.2c-.3-1.6.5-2.8 1.7-3 1-.2 1.8.4 2 1.1"/></svg></div><span>Manicure</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Pedicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21c-1.7 0-3-1.3-3-3 0-3 1-5 1-8.2C5 7.7 6.8 6 9 6s3.2 1.6 3.2 3.7c0 2.1-.8 3.2-.8 5.3 0 2 1 3 3 3 1.5 0 2.6-.5 3.6-1.2"/><circle cx="15.8" cy="6.3" r="1"/><circle cx="18.3" cy="7.9" r="1"/><circle cx="19.4" cy="10.4" r="1"/></svg></div><span>Pedicure</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Alongamento Molde F1')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8L9 3h6l2.5 5-6 12.5z"/><path d="M6.5 8h11M9 3l3 5 3-5M9.2 8l2.8 12.5L15 8"/></svg></div><span>Alongamento Molde F1</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Banho de Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s6 6.8 6 11a6 6 0 01-12 0c0-4.2 6-11 6-11z"/></svg></div><span>Banho de Gel</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Spa dos Pés Relaxante')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.2-2.1-6.3-5.3-6.3-8.4 2.1 0 4.2 1.1 6.3 3.2 2.1-2.1 4.2-3.2 6.3-3.2 0 3.1-2.1 6.3-6.3 8.4z"/><path d="M12 12.8V5.5M9 9c0-2 1-3.8 3-4.8M15 9c0-2-1-3.8-3-4.8"/></svg></div><span>Spa dos Pés Relaxante</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Plástica dos Pés — Remoção de Rachaduras')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9.3" width="17" height="6" rx="3" transform="rotate(-15 12 12)"/><circle cx="9" cy="10.3" r=".6" fill="currentColor" stroke="none"/><circle cx="15.2" cy="13.6" r=".6" fill="currentColor" stroke="none"/></svg></div><span>Plástica dos Pés — Remoção de Rachaduras</span></div>
+      </div>
+      <div class="catalog-note">Valores sob consulta — confirme o preço na hora de agendar pelo WhatsApp.</div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicos">
+<div class="container">
+  <div class="section-head"><div class="eyebrow">Catálogo</div><h2>Nossos serviços</h2><p>Escolha seu procedimento favorito.</p></div>
+  <div class="services">
+    <article class="service"><div class="service-icon">💅</div><h3>Manicure</h3><p>Cuidado completo das unhas, cutículas e acabamento impecável.</p><div class="price">R$ 35 <span class="duration">• 45 min</span></div></article>
+    <article class="service"><div class="service-icon">✨</div><h3>Alongamento em Gel</h3><p>Unhas longas e resistentes com acabamento elegante e natural.</p><div class="price">R$ 120 <span class="duration">• 2h</span></div></article>
+    <article class="service"><div class="service-icon">🌸</div><h3>Banho de Gel</h3><p>Proteção e resistência para suas unhas naturais.</p><div class="price">R$ 80 <span class="duration">• 1h20</span></div></article>
+    <article class="service"><div class="service-icon">🎨</div><h3>Decoração</h3><p>Detalhes personalizados para deixar suas unhas únicas.</p><div class="price">A partir de R$ 15</div></article>
+    <article class="service"><div class="service-icon">💎</div><h3>Manicure + Esmaltação em Gel</h3><p>Manicure completa com esmaltação de alta durabilidade.</p><div class="price">R$ 65 <span class="duration">• 1h</span></div></article>
+    <article class="service"><div class="service-icon">🧴</div><h3>Spa das Mãos</h3><p>Esfoliação, hidratação e uma pausa relaxante para suas mãos.</p><div class="price">R$ 45 <span class="duration">• 40 min</span></div></article>
+  </div>
+</div>
+</section>
+
+<section id="info-strip">
+<div class="container">
+  <div class="info-list" style="grid-template-columns:repeat(3,1fr)">
+    <div>📍 Rua Exemplo, 123 — Centro</div>
+    <div>🕘 Segunda a sábado — 09h às 19h</div>
+    <div>📲 Confirmação do agendamento pelo WhatsApp</div>
+  </div>
+</div>
+</section>
+
+<section id="galeria">
+<div class="container">
+ <div class="section-head"><div class="eyebrow">Inspirações</div><h2>Nosso trabalho</h2><p>Substitua estes cards pelas fotos reais do seu studio.</p></div>
+ <div class="gallery"><div class="g-item">Nude elegante</div><div class="g-item">Francesinha</div><div class="g-item">Delicada</div><div class="g-item">Nail art</div></div>
+</div>
+</section>
+
+<section id="contato">
+<div class="container">
+ <div class="contact"><div><div class="eyebrow" style="color:#e8c99a">Vamos conversar?</div><h2 style="color:#fff">Agende seu horário</h2><p>Fale com a Vitória Vieira Nails & Spa pelo WhatsApp e confirme seu atendimento.</p></div><a class="hero-btn" id="whatsapp" href="#" target="_blank">WhatsApp</a></div>
+</div>
+</section>
+</main>
+<footer>© 2026 Vitória Vieira Nails & Spa • Todos os direitos reservados.</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== CONFIGURAÇÃO DA PLANILHA DE AGENDAMENTOS ======
+// Cole aqui a URL do seu Web App do Google Apps Script (termina em /exec).
+// Enquanto estiver vazia, o site funciona normalmente, mas sem travar horários já marcados.
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwvOHhfggTze_KlfN3gnEZkptC5ozPL3PFC0svES3zi_0EtKucDp614670LVDmSIiMSIw/exec";
+// =======================================================
+const monthNames=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+let current=new Date(); current.setDate(1);
+let selected=null;
+const today=new Date(); today.setHours(0,0,0,0);
+
+function renderCalendar(){
+ const y=current.getFullYear(), m=current.getMonth();
+ document.getElementById("monthTitle").textContent=monthNames[m]+" "+y;
+ const days=document.getElementById("days"); days.innerHTML="";
+ const first=new Date(y,m,1).getDay();
+ const total=new Date(y,m+1,0).getDate();
+ for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";days.appendChild(e)}
+ for(let d=1;d<=total;d++){
+   let date=new Date(y,m,d);date.setHours(0,0,0,0);
+   let b=document.createElement("button");b.className="day";b.textContent=d;
+   const isPast=date<today, isSunday=date.getDay()===0;
+   if(isPast||isSunday)b.classList.add("disabled");
+   else b.onclick=()=>selectDate(date);
+   if(selected&&date.getTime()===selected.getTime())b.classList.add("selected");
+   days.appendChild(b);
+ }
+}
+function pickService(el,name){
+ document.querySelectorAll(".catalog-item").forEach(i=>i.classList.remove("active"));
+ el.classList.add("active");
+ document.getElementById("service").value=name;
+ showToast("Serviço selecionado: "+name+". Agora escolha o dia no calendário.");
+}
+function isoDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
+function selectDate(date){
+ selected=date;
+ document.getElementById("dateField").value=date.toLocaleDateString("pt-BR");
+ document.getElementById("time").value="";
+ renderCalendar();
+ openTimePopover();
+}
+function generateSlots(){
+ const arr=[];
+ for(let h=6;h<=20;h++){ arr.push(String(h).padStart(2,"0")+":00"); }
+ return arr;
+}
+let bookedForDay=[];
+async function fetchBookedTimes(date){
+ if(!SHEET_API_URL) return [];
+ try{
+   const iso=isoDate(date);
+   const res=await fetch(SHEET_API_URL);
+   const data=await res.json();
+   return data.filter(r=>r.date===iso).map(r=>r.time);
+ }catch(err){ console.error("Erro ao buscar horários ocupados:",err); return []; }
+}
+function renderSlots(){
+ const wrap=document.getElementById("tpSlots"); wrap.innerHTML="";
+ generateSlots().forEach(t=>{
+   const b=document.createElement("button");
+   b.type="button"; b.className="tp-slot"; b.textContent=t;
+   if(bookedForDay.includes(t)){
+     b.classList.add("taken"); b.disabled=true; b.title="Horário já reservado";
+   }else{
+     if(document.getElementById("time").value===t) b.classList.add("active");
+     b.onclick=()=>chooseTime(t);
+   }
+   wrap.appendChild(b);
+ });
+ document.getElementById("customTime").value="";
+}
+async function openTimePopover(){
+ document.getElementById("tpDate").textContent=document.getElementById("dateField").value;
+ document.getElementById("timePopover").classList.add("open");
+ const wrap=document.getElementById("tpSlots"); wrap.innerHTML='<div class="tp-loading">Carregando horários...</div>';
+ bookedForDay=await fetchBookedTimes(selected);
+ renderSlots();
+}
+function closeTimePopover(){document.getElementById("timePopover").classList.remove("open")}
+function chooseTime(t){document.getElementById("time").value=t;closeTimePopover()}
+function confirmCustomTime(){
+ const v=document.getElementById("customTime").value;
+ if(!v){showToast("Escolha um horário para continuar.");return}
+ if(bookedForDay.includes(v)){showToast("Esse horário já está ocupado. Escolha outro.");return}
+ document.getElementById("time").value=v;
+ closeTimePopover();
+}
+document.addEventListener("click",(e)=>{
+ const pop=document.getElementById("timePopover");
+ if(!pop.classList.contains("open"))return;
+ if(pop.contains(e.target)||e.target.closest("#time")||e.target.classList.contains("day"))return;
+ closeTimePopover();
+});
+document.getElementById("prev").onclick=()=>{current.setMonth(current.getMonth()-1);renderCalendar()}
+document.getElementById("next").onclick=()=>{current.setMonth(current.getMonth()+1);renderCalendar()}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",3500)}
+async function book(){
+ const date=document.getElementById("dateField").value,name=document.getElementById("name").value.trim();
+ const phone=document.getElementById("phone").value.trim(),time=document.getElementById("time").value,service=document.getElementById("service").value;
+ if(!date||!name||!phone||!time||!service){showToast("Preencha todos os campos para confirmar seu agendamento.");return}
+ if(SHEET_API_URL){
+   const btn=document.querySelector(".submit"); const original=btn.textContent;
+   btn.textContent="Verificando horário..."; btn.disabled=true;
+   try{
+     const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({date:isoDate(selected),time,name,phone,service})});
+     const result=await res.json();
+     btn.textContent=original; btn.disabled=false;
+     if(!result.success){
+       showToast("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
+       openTimePopover();
+       return;
+     }
+   }catch(err){
+     btn.textContent=original; btn.disabled=false;
+     console.error("Erro ao gravar agendamento na planilha:",err);
+   }
+ }
+ const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*WhatsApp:* ${encodeURIComponent(phone)}`;
+ const number="5563999999999"; // TROQUE pelo WhatsApp do studio
+ window.open(`https://wa.me/${number}?text=${text}`,"_blank");
+ showToast("Agendamento preparado! Você será direcionada ao WhatsApp.");
+}
+document.getElementById("whatsapp").href="https://wa.me/5563999999999?text=Olá!%20Quero%20agendar%20um%20horário%20na%20Vitória%20Vieira%20Nails%20%26%20Spa.";
+renderCalendar();
+</script>
+</body>
+</html>
