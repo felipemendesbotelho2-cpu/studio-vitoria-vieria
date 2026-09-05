@@ -285,13 +285,21 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 <div class="modal-overlay" id="bookingModal">
   <div class="modal-box">
     <button type="button" class="modal-close" onclick="closeBookingModal()">✕</button>
-    <h4>Só mais um passo</h4>
-    <p>Confirme seus dados para enviar o agendamento pelo WhatsApp.</p>
-    <div class="modal-summary" id="modalSummary"></div>
-    <div class="modal-field"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option value="Manicure + Esmaltação em Gel">Manicure + Esmaltação em Gel — R$ 100</option><option value="Manicure e Pedicure Tradicional">Manicure e Pedicure Tradicional — R$ 100</option><option value="Manicure">Manicure — R$ 100</option><option value="Pedicure">Pedicure — R$ 100</option><option value="Alongamento Molde F1">Alongamento Molde F1 — R$ 100</option><option value="Banho de Gel">Banho de Gel — R$ 100</option><option value="Spa dos Pés Relaxante">Spa dos Pés Relaxante — R$ 100</option><option value="Plástica dos Pés — Remoção de Rachaduras">Plástica dos Pés — Remoção de Rachaduras — R$ 100</option></select></div>
-    <div class="modal-field"><label>Seu nome</label><input id="modalName" placeholder="Digite seu nome"></div>
-    <div class="modal-field"><label>WhatsApp</label><input id="modalPhone" placeholder="(63) 99999-9999"></div>
-    <button class="submit" id="confirmBookBtn" onclick="book()">Confirmar agendamento</button>
+    <div id="modalStepForm">
+      <h4>Só mais um passo</h4>
+      <p>Confirme seus dados para registrar seu agendamento.</p>
+      <div class="modal-summary" id="modalSummary"></div>
+      <div class="modal-field"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option value="Manicure + Esmaltação em Gel">Manicure + Esmaltação em Gel — R$ 100</option><option value="Manicure e Pedicure Tradicional">Manicure e Pedicure Tradicional — R$ 100</option><option value="Manicure">Manicure — R$ 100</option><option value="Pedicure">Pedicure — R$ 100</option><option value="Alongamento Molde F1">Alongamento Molde F1 — R$ 100</option><option value="Banho de Gel">Banho de Gel — R$ 100</option><option value="Spa dos Pés Relaxante">Spa dos Pés Relaxante — R$ 100</option><option value="Plástica dos Pés — Remoção de Rachaduras">Plástica dos Pés — Remoção de Rachaduras — R$ 100</option></select></div>
+      <div class="modal-field"><label>Seu nome</label><input id="modalName" placeholder="Digite seu nome"></div>
+      <div class="modal-field"><label>WhatsApp</label><input id="modalPhone" placeholder="(63) 99999-9999"></div>
+      <button class="submit" id="confirmBookBtn" onclick="book()">Confirmar agendamento</button>
+    </div>
+    <div id="modalStepDone" style="display:none">
+      <h4>Agendamento confirmado! ✅</h4>
+      <p>Seu horário já está reservado. Agora é só finalizar enviando a confirmação pelo WhatsApp.</p>
+      <div class="modal-summary" id="modalSummaryDone"></div>
+      <button class="submit" onclick="finalizeWhatsapp()">Finalizar agendamento</button>
+    </div>
   </div>
 </div>
 
@@ -407,6 +415,8 @@ function openBookingModal(){
  const date=document.getElementById("dateField").value,time=document.getElementById("time").value;
  if(!date||!time){showToast("Escolha um dia e um horário no calendário.");return}
  document.getElementById("modalSummary").innerHTML=`<div><strong>${date}</strong> às <strong>${time}</strong></div>`;
+ document.getElementById("modalStepForm").style.display="block";
+ document.getElementById("modalStepDone").style.display="none";
  document.getElementById("bookingModal").classList.add("open");
 }
 function closeBookingModal(){document.getElementById("bookingModal").classList.remove("open")}
@@ -416,8 +426,6 @@ async function book(){
  if(!date||!name||!phone||!time||!service){showToast("Preencha o serviço, seu nome e WhatsApp para confirmar.");return}
  document.getElementById("name").value=name;
  document.getElementById("phone").value=phone;
- // Abre a aba já no clique (antes de qualquer espera), pra não ser bloqueada como pop-up no celular
- const waWin=window.open("","_blank");
  if(SHEET_API_URL){
    const btn=document.getElementById("confirmBookBtn"); const original=btn.textContent;
    btn.textContent="Verificando horário..."; btn.disabled=true;
@@ -426,7 +434,6 @@ async function book(){
      const result=await res.json();
      btn.textContent=original; btn.disabled=false;
      if(!result.success){
-       if(waWin)waWin.close();
        showToast("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
        closeBookingModal();
        openTimePopover();
@@ -438,12 +445,18 @@ async function book(){
    }
  }
  const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
+ document.getElementById("modalSummaryDone").innerHTML=`<div><strong>${date}</strong> às <strong>${time}</strong></div><div>${service}</div><div>${price}</div>`;
+ document.getElementById("modalStepForm").style.display="none";
+ document.getElementById("modalStepDone").style.display="block";
+}
+function finalizeWhatsapp(){
+ const date=document.getElementById("dateField").value,name=document.getElementById("name").value;
+ const phone=document.getElementById("phone").value,time=document.getElementById("time").value,service=document.getElementById("service").value;
+ const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
  const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*Valor:* ${encodeURIComponent(price)}%0A*WhatsApp da cliente:* ${encodeURIComponent(phone)}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
- const waUrl=`https://wa.me/${number}?text=${text}`;
- if(waWin){waWin.location.href=waUrl;}else{window.location.href=waUrl;}
+ window.location.href=`https://wa.me/${number}?text=${text}`;
  closeBookingModal();
- showToast("Agendamento preparado! Você será direcionada ao WhatsApp.");
 }
 document.getElementById("whatsapp").href="https://wa.me/5563993008899?text=Olá!%20Quero%20agendar%20um%20horário%20na%20Vitória%20Vieira%20Nails%20%26%20Spa.";
 renderCalendar();
