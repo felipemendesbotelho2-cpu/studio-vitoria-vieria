@@ -136,7 +136,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 .admin-panel-head h4{font-family:var(--serif);font-weight:600;font-size:15px}
 .admin-refresh{border:1px solid var(--line);background:var(--bg);color:var(--primary-dark);padding:5px 10px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:500}
 .admin-refresh:hover{border-color:var(--primary)}
-.admin-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border:1px solid var(--line);border-radius:12px;margin-bottom:7px;background:var(--bg);font-size:12px}
+.admin-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:10px;border:1px solid var(--line);border-radius:12px;margin-bottom:7px;background:var(--bg);font-size:12px;line-height:1.6}
 .admin-row.cancelled{opacity:.55}
 .admin-row strong{font-size:12.5px}
 .admin-status{display:inline-block;margin-top:3px;font-size:10.5px;padding:2px 8px;border-radius:999px;background:var(--soft);color:var(--primary-dark);font-weight:600}
@@ -418,6 +418,8 @@ async function book(){
  if(!date||!name||!phone||!time||!service){showToast("Preencha o serviço, seu nome e WhatsApp para confirmar.");return}
  document.getElementById("name").value=name;
  document.getElementById("phone").value=phone;
+ // Abre a aba já no clique (antes de qualquer espera), pra não ser bloqueada como pop-up no celular
+ const waWin=window.open("","_blank");
  if(SHEET_API_URL){
    const btn=document.getElementById("confirmBookBtn"); const original=btn.textContent;
    btn.textContent="Verificando horário..."; btn.disabled=true;
@@ -426,6 +428,7 @@ async function book(){
      const result=await res.json();
      btn.textContent=original; btn.disabled=false;
      if(!result.success){
+       if(waWin)waWin.close();
        showToast("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
        closeBookingModal();
        openTimePopover();
@@ -439,7 +442,8 @@ async function book(){
  const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
  const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*Valor:* ${encodeURIComponent(price)}%0A*WhatsApp da cliente:* ${encodeURIComponent(phone)}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
- window.open(`https://wa.me/${number}?text=${text}`,"_blank");
+ const waUrl=`https://wa.me/${number}?text=${text}`;
+ if(waWin){waWin.location.href=waUrl;}else{window.location.href=waUrl;}
  closeBookingModal();
  showToast("Agendamento preparado! Você será direcionada ao WhatsApp.");
 }
@@ -480,6 +484,11 @@ async function loadAdminBookings(){
    list.innerHTML='<div class="admin-empty">Erro ao carregar agendamentos.</div>';
  }
 }
+function waDigits(phone){
+ let d=(phone||"").replace(/\D/g,"");
+ if(d.length<=11)d="55"+d;
+ return d;
+}
 function renderAdminBookings(items){
  const list=document.getElementById("adminList");
  list.innerHTML="";
@@ -489,7 +498,7 @@ function renderAdminBookings(items){
    const cancelled=item.status==="Cancelado";
    const row=document.createElement("div");
    row.className="admin-row"+(cancelled?" cancelled":"");
-   row.innerHTML=`<div><strong>${item.date} — ${item.time}</strong><br>${item.name} · ${item.service}<br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
+   row.innerHTML=`<div><strong>${item.name}</strong><br>📅 ${item.date} — ⏰ ${item.time}<br>💅 ${item.service}<br>📱 <a href="https://wa.me/${waDigits(item.phone)}" target="_blank" style="color:var(--primary-dark);text-decoration:underline">${item.phone||"-"}</a><br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
    if(!cancelled){
      const btn=document.createElement("button");
      btn.className="admin-cancel-btn"; btn.textContent="Cancelar";
