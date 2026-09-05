@@ -74,6 +74,7 @@ h2{font-family:var(--serif);font-size:42px;margin:5px 0 8px}
 .ci-icon svg{width:19px;height:19px}
 .catalog-item.active .ci-icon{background:radial-gradient(circle at 35% 30%,#e7c98a,var(--primary) 75%);color:#fff;box-shadow:none}
 .catalog-item span{font-size:13.5px;font-weight:500;line-height:1.3}
+.ci-price{margin-left:auto;font-size:12.5px!important;color:var(--primary-dark);font-weight:600!important;white-space:nowrap;padding-left:8px}
 .catalog-note{margin-top:16px;font-size:12.5px;color:var(--muted);position:relative}
 .time-popover{display:none;position:absolute;top:64px;left:8px;right:8px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;z-index:30}
 .time-popover.open{display:block}
@@ -117,6 +118,25 @@ input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(2
 .contact{background:var(--dark);color:#fff;border-radius:30px;padding:44px;display:flex;align-items:center;justify-content:space-between;gap:30px;border:1px solid #40331e}
 .contact p{color:#cbbb9d}.contact .hero-btn{background:#fff;color:var(--primary-dark)}
 footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family:var(--serif);letter-spacing:.5px}
+#painel-profissional{padding:0 0 50px}
+.admin-box{background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:26px 28px;max-width:640px;margin:0 auto}
+.admin-box h4{font-family:var(--serif);font-weight:600;font-size:20px;margin-bottom:4px}
+.admin-box>p{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+.admin-login-row{display:flex;gap:10px}
+.admin-login-row input{flex:1;padding:11px 13px;border:1px solid var(--line);border-radius:12px;font-family:var(--sans)}
+.admin-login-row button{border:0;background:var(--primary);color:#fff;padding:0 20px;border-radius:12px;cursor:pointer;font-weight:500}
+.admin-login-row button:hover{background:var(--primary-dark)}
+.admin-panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.admin-refresh{border:1px solid var(--line);background:var(--bg);color:var(--primary-dark);padding:7px 14px;border-radius:10px;cursor:pointer;font-size:12.5px;font-weight:500}
+.admin-refresh:hover{border-color:var(--primary)}
+.admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;background:var(--bg)}
+.admin-row.cancelled{opacity:.55}
+.admin-row strong{font-size:14px}
+.admin-status{display:inline-block;margin-top:4px;font-size:11.5px;padding:2px 9px;border-radius:999px;background:var(--soft);color:var(--primary-dark);font-weight:600}
+.admin-row.cancelled .admin-status{background:#efe9dd;color:#a99b85}
+.admin-cancel-btn{border:0;background:#c0392b;color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:12.5px;font-weight:500;flex-shrink:0}
+.admin-cancel-btn:hover{background:#a5301f}
+.admin-empty{color:var(--muted);font-size:13.5px;text-align:center;padding:20px 0}
 .toast{position:fixed;right:20px;bottom:20px;background:#fff;border:1px solid var(--line);padding:15px 18px;border-radius:15px;box-shadow:var(--shadow);display:none;z-index:100}
 @media(max-width:800px){
  nav{display:none}.hero-grid,.booking-wrap{grid-template-columns:1fr}.hero{padding-top:42px}.hero-card{min-height:350px}
@@ -126,6 +146,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 @media(max-width:520px){
  .services{grid-template-columns:1fr}.gallery{grid-template-columns:1fr 1fr}.g-item{height:180px}
  h2{font-size:34px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+ .admin-login-row{flex-direction:column}.admin-row{flex-direction:column;align-items:flex-start}.admin-cancel-btn{width:100%}
 }
 </style>
 </head>
@@ -168,9 +189,9 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
             <div><label>Horário</label><input id="time" readonly placeholder="Selecione no calendário" style="cursor:pointer" onclick="if(selected)openTimePopover()"></div>
             <div><label>Seu nome</label><input id="name" placeholder="Digite seu nome"></div>
             <div><label>WhatsApp</label><input id="phone" placeholder="(63) 99999-9999"></div>
-            <div class="full"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option>Manicure + Esmaltação em Gel</option><option>Manicure e Pedicure Tradicional</option><option>Manicure</option><option>Pedicure</option><option>Alongamento Molde F1</option><option>Banho de Gel</option><option>Spa dos Pés Relaxante</option><option>Plástica dos Pés — Remoção de Rachaduras</option></select></div>
+            <div class="full"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option value="Manicure + Esmaltação em Gel">Manicure + Esmaltação em Gel — R$ 100</option><option value="Manicure e Pedicure Tradicional">Manicure e Pedicure Tradicional — R$ 100</option><option value="Manicure">Manicure — R$ 100</option><option value="Pedicure">Pedicure — R$ 100</option><option value="Alongamento Molde F1">Alongamento Molde F1 — R$ 100</option><option value="Banho de Gel">Banho de Gel — R$ 100</option><option value="Spa dos Pés Relaxante">Spa dos Pés Relaxante — R$ 100</option><option value="Plástica dos Pés — Remoção de Rachaduras">Plástica dos Pés — Remoção de Rachaduras — R$ 100</option></select></div>
           </div>
-          <button class="submit" onclick="book()">Confirmar agendamento</button>
+          <button class="submit" onclick="book()">Finalizar agendamento</button>
         </div>
       </div>
       <a class="secondary" href="#servicos" style="display:inline-block;margin-top:16px">Ver catálogo de serviços</a>
@@ -180,16 +201,16 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
       <h3>Catálogo de serviços</h3>
       <p>Toque em um serviço para já marcá-lo no seu agendamento ao lado.</p>
       <div class="catalog-list" id="catalogList">
-        <div class="catalog-item" onclick="pickService(this,'Manicure + Esmaltação em Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v3l-2 2v3h-2V7L9 5V2z"/><rect x="7" y="10" width="10" height="11" rx="2.5"/></svg></div><span>Manicure + Esmaltação em Gel</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Manicure e Pedicure Tradicional')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9.8A4 4 0 0112 7.6 4 4 0 0119 10.2c0 5.5-7 9.8-7 9.8z"/><path d="M12 4.5v2M9.3 4l.5 1.6M14.7 4l-.5 1.6"/></svg></div><span>Manicure e Pedicure Tradicional</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Manicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 12.5V6a1.3 1.3 0 012.6 0v5"/><path d="M10.1 11.5V4.3a1.3 1.3 0 012.6 0v7.2"/><path d="M12.7 12V6a1.3 1.3 0 012.6 0v7"/><path d="M15.3 13V8a1.3 1.3 0 012.6 0v6.5c0 3.6-2.3 6.5-5.7 6.5s-5.7-2.3-6.2-5.2c-.3-1.6.5-2.8 1.7-3 1-.2 1.8.4 2 1.1"/></svg></div><span>Manicure</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Pedicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21c-1.7 0-3-1.3-3-3 0-3 1-5 1-8.2C5 7.7 6.8 6 9 6s3.2 1.6 3.2 3.7c0 2.1-.8 3.2-.8 5.3 0 2 1 3 3 3 1.5 0 2.6-.5 3.6-1.2"/><circle cx="15.8" cy="6.3" r="1"/><circle cx="18.3" cy="7.9" r="1"/><circle cx="19.4" cy="10.4" r="1"/></svg></div><span>Pedicure</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Alongamento Molde F1')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8L9 3h6l2.5 5-6 12.5z"/><path d="M6.5 8h11M9 3l3 5 3-5M9.2 8l2.8 12.5L15 8"/></svg></div><span>Alongamento Molde F1</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Banho de Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s6 6.8 6 11a6 6 0 01-12 0c0-4.2 6-11 6-11z"/></svg></div><span>Banho de Gel</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Spa dos Pés Relaxante')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.2-2.1-6.3-5.3-6.3-8.4 2.1 0 4.2 1.1 6.3 3.2 2.1-2.1 4.2-3.2 6.3-3.2 0 3.1-2.1 6.3-6.3 8.4z"/><path d="M12 12.8V5.5M9 9c0-2 1-3.8 3-4.8M15 9c0-2-1-3.8-3-4.8"/></svg></div><span>Spa dos Pés Relaxante</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Plástica dos Pés — Remoção de Rachaduras')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9.3" width="17" height="6" rx="3" transform="rotate(-15 12 12)"/><circle cx="9" cy="10.3" r=".6" fill="currentColor" stroke="none"/><circle cx="15.2" cy="13.6" r=".6" fill="currentColor" stroke="none"/></svg></div><span>Plástica dos Pés — Remoção de Rachaduras</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Manicure + Esmaltação em Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v3l-2 2v3h-2V7L9 5V2z"/><rect x="7" y="10" width="10" height="11" rx="2.5"/></svg></div><span>Manicure + Esmaltação em Gel</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Manicure e Pedicure Tradicional')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.3-7-9.8A4 4 0 0112 7.6 4 4 0 0119 10.2c0 5.5-7 9.8-7 9.8z"/><path d="M12 4.5v2M9.3 4l.5 1.6M14.7 4l-.5 1.6"/></svg></div><span>Manicure e Pedicure Tradicional</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Manicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 12.5V6a1.3 1.3 0 012.6 0v5"/><path d="M10.1 11.5V4.3a1.3 1.3 0 012.6 0v7.2"/><path d="M12.7 12V6a1.3 1.3 0 012.6 0v7"/><path d="M15.3 13V8a1.3 1.3 0 012.6 0v6.5c0 3.6-2.3 6.5-5.7 6.5s-5.7-2.3-6.2-5.2c-.3-1.6.5-2.8 1.7-3 1-.2 1.8.4 2 1.1"/></svg></div><span>Manicure</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Pedicure')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21c-1.7 0-3-1.3-3-3 0-3 1-5 1-8.2C5 7.7 6.8 6 9 6s3.2 1.6 3.2 3.7c0 2.1-.8 3.2-.8 5.3 0 2 1 3 3 3 1.5 0 2.6-.5 3.6-1.2"/><circle cx="15.8" cy="6.3" r="1"/><circle cx="18.3" cy="7.9" r="1"/><circle cx="19.4" cy="10.4" r="1"/></svg></div><span>Pedicure</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Alongamento Molde F1')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8L9 3h6l2.5 5-6 12.5z"/><path d="M6.5 8h11M9 3l3 5 3-5M9.2 8l2.8 12.5L15 8"/></svg></div><span>Alongamento Molde F1</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Banho de Gel')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2s6 6.8 6 11a6 6 0 01-12 0c0-4.2 6-11 6-11z"/></svg></div><span>Banho de Gel</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Spa dos Pés Relaxante')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.2-2.1-6.3-5.3-6.3-8.4 2.1 0 4.2 1.1 6.3 3.2 2.1-2.1 4.2-3.2 6.3-3.2 0 3.1-2.1 6.3-6.3 8.4z"/><path d="M12 12.8V5.5M9 9c0-2 1-3.8 3-4.8M15 9c0-2-1-3.8-3-4.8"/></svg></div><span>Spa dos Pés Relaxante</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" onclick="pickService(this,'Plástica dos Pés — Remoção de Rachaduras')"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="9.3" width="17" height="6" rx="3" transform="rotate(-15 12 12)"/><circle cx="9" cy="10.3" r=".6" fill="currentColor" stroke="none"/><circle cx="15.2" cy="13.6" r=".6" fill="currentColor" stroke="none"/></svg></div><span>Plástica dos Pés — Remoção de Rachaduras</span><span class="ci-price">R$ 100</span></div>
       </div>
-      <div class="catalog-note">Valores sob consulta — confirme o preço na hora de agendar pelo WhatsApp.</div>
+      <div class="catalog-note">Valor promocional de lançamento: R$ 100 por serviço.</div>
     </div>
     </div>
   </div>
@@ -232,7 +253,26 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 </div>
 </section>
 </main>
-<footer>© 2026 Vitória Vieira Nails & Spa • Todos os direitos reservados.</footer>
+<section id="painel-profissional">
+<div class="container">
+  <div id="adminLoginBox" class="admin-box">
+    <h4>Área da profissional</h4>
+    <p>Acesse para ver e cancelar agendamentos.</p>
+    <div class="admin-login-row">
+      <input type="password" id="adminPass" placeholder="Senha">
+      <button type="button" onclick="adminLogin()">Entrar</button>
+    </div>
+  </div>
+  <div id="adminPanelBox" class="admin-box" style="display:none">
+    <div class="admin-panel-head">
+      <h4>Agendamentos</h4>
+      <button type="button" class="admin-refresh" onclick="loadAdminBookings()">Atualizar</button>
+    </div>
+    <div id="adminList"></div>
+  </div>
+</div>
+</section>
+<footer>© 2026 Vitória Vieira Nails & Spa • Todos os direitos reservados. • <a href="#painel-profissional" style="color:inherit;text-decoration:underline">Área da profissional</a></footer>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -242,6 +282,16 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbwvOHhfggTze_KlfN3gnEZkptC5ozPL3PFC0svES3zi_0EtKucDp614670LVDmSIiMSIw/exec";
 // =======================================================
 const monthNames=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const servicePrices={
+ "Manicure + Esmaltação em Gel":100,
+ "Manicure e Pedicure Tradicional":100,
+ "Manicure":100,
+ "Pedicure":100,
+ "Alongamento Molde F1":100,
+ "Banho de Gel":100,
+ "Spa dos Pés Relaxante":100,
+ "Plástica dos Pés — Remoção de Rachaduras":100
+};
 let current=new Date(); current.setDate(1);
 let selected=null;
 const today=new Date(); today.setHours(0,0,0,0);
@@ -353,13 +403,76 @@ async function book(){
      console.error("Erro ao gravar agendamento na planilha:",err);
    }
  }
- const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*WhatsApp:* ${encodeURIComponent(phone)}`;
+ const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
+ const text=`Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.%0A%0A*Nome:* ${encodeURIComponent(name)}%0A*Data:* ${encodeURIComponent(date)}%0A*Horário:* ${encodeURIComponent(time)}%0A*Serviço:* ${encodeURIComponent(service)}%0A*Valor:* ${encodeURIComponent(price)}%0A*WhatsApp da cliente:* ${encodeURIComponent(phone)}`;
  const number="5563999999999"; // TROQUE pelo WhatsApp do studio
  window.open(`https://wa.me/${number}?text=${text}`,"_blank");
  showToast("Agendamento preparado! Você será direcionada ao WhatsApp.");
 }
 document.getElementById("whatsapp").href="https://wa.me/5563999999999?text=Olá!%20Quero%20agendar%20um%20horário%20na%20Vitória%20Vieira%20Nails%20%26%20Spa.";
 renderCalendar();
+
+// ====== ÁREA DA PROFISSIONAL ======
+let adminKey=null;
+function adminLogin(){
+ const key=document.getElementById("adminPass").value.trim();
+ if(!key){showToast("Digite a senha.");return}
+ if(!SHEET_API_URL){showToast("Configure a URL da planilha primeiro.");return}
+ adminKey=key;
+ loadAdminBookings();
+}
+async function loadAdminBookings(){
+ const list=document.getElementById("adminList");
+ list.innerHTML='<div class="admin-empty">Carregando agendamentos...</div>';
+ try{
+   const res=await fetch(`${SHEET_API_URL}?admin=1&key=${encodeURIComponent(adminKey)}`);
+   const data=await res.json();
+   if(data && data.error){
+     showToast(data.error);
+     document.getElementById("adminLoginBox").style.display="block";
+     document.getElementById("adminPanelBox").style.display="none";
+     adminKey=null;
+     return;
+   }
+   document.getElementById("adminLoginBox").style.display="none";
+   document.getElementById("adminPanelBox").style.display="block";
+   renderAdminBookings(data);
+ }catch(err){
+   console.error("Erro ao carregar agendamentos:",err);
+   list.innerHTML='<div class="admin-empty">Erro ao carregar agendamentos.</div>';
+ }
+}
+function renderAdminBookings(items){
+ const list=document.getElementById("adminList");
+ list.innerHTML="";
+ if(!items||items.length===0){ list.innerHTML='<div class="admin-empty">Nenhum agendamento ainda.</div>'; return; }
+ items.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
+ items.forEach(item=>{
+   const cancelled=item.status==="Cancelado";
+   const row=document.createElement("div");
+   row.className="admin-row"+(cancelled?" cancelled":"");
+   row.innerHTML=`<div><strong>${item.date} — ${item.time}</strong><br>${item.name} · ${item.service}<br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
+   if(!cancelled){
+     const btn=document.createElement("button");
+     btn.className="admin-cancel-btn"; btn.textContent="Cancelar";
+     btn.onclick=()=>cancelBooking(item.row);
+     row.appendChild(btn);
+   }
+   list.appendChild(row);
+ });
+}
+async function cancelBooking(row){
+ if(!confirm("Cancelar esse agendamento e liberar o horário?"))return;
+ try{
+   const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({action:"cancel",key:adminKey,row})});
+   const result=await res.json();
+   if(result.success){ showToast("Agendamento cancelado. Horário liberado!"); loadAdminBookings(); }
+   else{ showToast(result.message||"Não foi possível cancelar."); }
+ }catch(err){
+   console.error("Erro ao cancelar:",err);
+   showToast("Erro ao cancelar. Tente novamente.");
+ }
+}
 </script>
 </body>
 </html>
