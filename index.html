@@ -350,6 +350,18 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
   .header-guide-links .catalog-nav-link{font-size:10.5px;padding-left:4px;padding-right:4px}
 }
 </style>
+
+<style>
+.service-checklist{display:grid;gap:8px;max-height:230px;overflow-y:auto;padding-right:2px}
+.service-check-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);cursor:pointer;font-size:13.5px}
+.service-check-item:hover{border-color:var(--primary)}
+.service-check-item input{width:auto;flex-shrink:0;accent-color:var(--primary)}
+.service-check-item span{flex:1;line-height:1.3}
+.service-check-item b{color:var(--primary-dark);font-size:12.5px;white-space:nowrap}
+.service-total{margin-top:10px;text-align:right;font-size:14px;color:var(--text)}
+.service-total b{color:var(--primary-dark)}
+.catalog-item.active .ci-price{color:var(--primary)}
+</style>
 </head>
 <body>
 <header>
@@ -475,16 +487,16 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
       <h3>Catálogo de serviços</h3>
       <p>Toque em um serviço para já marcá-lo no seu agendamento ao lado. (Fotos de referência — substitua pelas fotos reais dos seus trabalhos quando quiser.)</p>
       <div class="catalog-list" id="catalogList">
-        <div class="catalog-item" onclick="pickService(this,'Manicure + Esmaltação em Gel')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&auto=format&q=70" alt="Manicure com esmaltação em gel" loading="lazy"></div><span>Manicure + Esmaltação em Gel</span><span class="ci-price">R$ 90</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Manicure e Pedicure Tradicional')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&auto=format&q=70" alt="Manicure e pedicure tradicional" loading="lazy"></div><span>Manicure e Pedicure Tradicional</span><span class="ci-price">R$ 65</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Manicure')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=left&auto=format&q=70" alt="Manicure" loading="lazy"></div><span>Manicure</span><span class="ci-price">R$ 35</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Pedicure')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=left&auto=format&q=70" alt="Pedicure" loading="lazy"></div><span>Pedicure</span><span class="ci-price">R$ 40</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Alongamento Molde F1')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=right&auto=format&q=70" alt="Alongamento de unhas molde F1" loading="lazy"></div><span>Alongamento Molde F1</span><span class="ci-price">R$ 160</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Banho de Gel')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=top&auto=format&q=70" alt="Banho de gel nas unhas" loading="lazy"></div><span>Banho de Gel</span><span class="ci-price">R$ 130</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Spa dos Pés Relaxante')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=top&auto=format&q=70" alt="Spa dos pés relaxante" loading="lazy"></div><span>Spa dos Pés Relaxante</span><span class="ci-price">R$ 50</span></div>
-        <div class="catalog-item" onclick="pickService(this,'Plástica dos Pés — Remoção de Rachaduras')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=bottom&auto=format&q=70" alt="Plástica dos pés — remoção de rachaduras" loading="lazy"></div><span>Plástica dos Pés — Remoção de Rachaduras</span><span class="ci-price">R$ 100</span></div>
+        <div class="catalog-item" data-service="Manicure + Esmaltação em Gel" onclick="toggleService('Manicure + Esmaltação em Gel')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&auto=format&q=70" alt="Manicure com esmaltação em gel" loading="lazy"></div><span>Manicure + Esmaltação em Gel</span><span class="ci-price">R$ 90</span></div>
+        <div class="catalog-item" data-service="Manicure e Pedicure Tradicional" onclick="toggleService('Manicure e Pedicure Tradicional')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&auto=format&q=70" alt="Manicure e pedicure tradicional" loading="lazy"></div><span>Manicure e Pedicure Tradicional</span><span class="ci-price">R$ 65</span></div>
+        <div class="catalog-item" data-service="Manicure" onclick="toggleService('Manicure')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=left&auto=format&q=70" alt="Manicure" loading="lazy"></div><span>Manicure</span><span class="ci-price">R$ 35</span></div>
+        <div class="catalog-item" data-service="Pedicure" onclick="toggleService('Pedicure')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=left&auto=format&q=70" alt="Pedicure" loading="lazy"></div><span>Pedicure</span><span class="ci-price">R$ 40</span></div>
+        <div class="catalog-item" data-service="Alongamento Molde F1" onclick="toggleService('Alongamento Molde F1')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=right&auto=format&q=70" alt="Alongamento de unhas molde F1" loading="lazy"></div><span>Alongamento Molde F1</span><span class="ci-price">R$ 160</span></div>
+        <div class="catalog-item" data-service="Banho de Gel" onclick="toggleService('Banho de Gel')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=120&h=120&fit=crop&crop=top&auto=format&q=70" alt="Banho de gel nas unhas" loading="lazy"></div><span>Banho de Gel</span><span class="ci-price">R$ 130</span></div>
+        <div class="catalog-item" data-service="Spa dos Pés Relaxante" onclick="toggleService('Spa dos Pés Relaxante')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=top&auto=format&q=70" alt="Spa dos pés relaxante" loading="lazy"></div><span>Spa dos Pés Relaxante</span><span class="ci-price">R$ 50</span></div>
+        <div class="catalog-item" data-service="Plástica dos Pés — Remoção de Rachaduras" onclick="toggleService('Plástica dos Pés — Remoção de Rachaduras')"><div class="ci-icon"><img src="https://images.unsplash.com/photo-1664643411326-6c589531be3c?w=120&h=120&fit=crop&crop=bottom&auto=format&q=70" alt="Plástica dos pés — remoção de rachaduras" loading="lazy"></div><span>Plástica dos Pés — Remoção de Rachaduras</span><span class="ci-price">R$ 100</span></div>
       </div>
-      <div class="catalog-note">Confira o valor de cada serviço no catálogo acima.</div>
+      <div class="catalog-note" id="catalogSelectionNote">Toque em quantos serviços quiser — dá pra combinar, por exemplo, manicure e spa dos pés no mesmo horário.</div>
     </div>
       </div>
     </div>
@@ -525,7 +537,21 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
       <h4>Só mais um passo</h4>
       <p>Confirme seus dados para registrar seu agendamento.</p>
       <div class="modal-summary" id="modalSummary"></div>
-      <div class="modal-field"><label>Serviço</label><select id="service"><option value="">Selecione um serviço</option><option value="Manicure + Esmaltação em Gel">Manicure + Esmaltação em Gel — R$ 90</option><option value="Manicure e Pedicure Tradicional">Manicure e Pedicure Tradicional — R$ 65</option><option value="Manicure">Manicure — R$ 35</option><option value="Pedicure">Pedicure — R$ 40</option><option value="Alongamento Molde F1">Alongamento Molde F1 — R$ 160</option><option value="Banho de Gel">Banho de Gel — R$ 130</option><option value="Spa dos Pés Relaxante">Spa dos Pés Relaxante — R$ 50</option><option value="Plástica dos Pés — Remoção de Rachaduras">Plástica dos Pés — Remoção de Rachaduras — R$ 100</option></select></div>
+      <div class="modal-field">
+        <label>Serviços (pode escolher mais de um)</label>
+        <div class="service-checklist" id="serviceChecklist">
+          <label class="service-check-item"><input type="checkbox" value="Manicure + Esmaltação em Gel" onchange="toggleService(this.value)"><span>Manicure + Esmaltação em Gel</span><b>R$ 90</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Manicure e Pedicure Tradicional" onchange="toggleService(this.value)"><span>Manicure e Pedicure Tradicional</span><b>R$ 65</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Manicure" onchange="toggleService(this.value)"><span>Manicure</span><b>R$ 35</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Pedicure" onchange="toggleService(this.value)"><span>Pedicure</span><b>R$ 40</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Alongamento Molde F1" onchange="toggleService(this.value)"><span>Alongamento Molde F1</span><b>R$ 160</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Banho de Gel" onchange="toggleService(this.value)"><span>Banho de Gel</span><b>R$ 130</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Spa dos Pés Relaxante" onchange="toggleService(this.value)"><span>Spa dos Pés Relaxante</span><b>R$ 50</b></label>
+          <label class="service-check-item"><input type="checkbox" value="Plástica dos Pés — Remoção de Rachaduras" onchange="toggleService(this.value)"><span>Plástica dos Pés — Remoção de Rachaduras</span><b>R$ 100</b></label>
+        </div>
+        <div class="service-total" id="serviceTotalRow" style="display:none">Total: <b id="serviceTotalValue">R$ 0</b></div>
+        <input type="hidden" id="service">
+      </div>
       <div class="modal-field"><label>Seu nome</label><input id="modalName" placeholder="Digite seu nome"></div>
       <div class="modal-field"><label>WhatsApp</label><input id="modalPhone" placeholder="(63) 99999-9999"></div>
       <button class="submit" id="confirmBookBtn" onclick="book()">Confirmar agendamento</button>
@@ -556,6 +582,32 @@ const servicePrices={
  "Spa dos Pés Relaxante":50,
  "Plástica dos Pés — Remoção de Rachaduras":100
 };
+let selectedServices=[];
+function calcServicePrice(serviceStr){
+ if(!serviceStr) return 0;
+ return String(serviceStr).split(",").map(s=>s.trim()).reduce((sum,s)=>sum+(servicePrices[s]||0),0);
+}
+function toggleService(name){
+ const idx=selectedServices.indexOf(name);
+ if(idx>-1){ selectedServices.splice(idx,1); showToast("Removido: "+name); }
+ else{ selectedServices.push(name); showToast("Adicionado: "+name+". Pode escolher mais serviços ou o dia no calendário."); }
+ syncServiceUI();
+}
+function syncServiceUI(){
+ document.querySelectorAll(".catalog-item").forEach(item=>{
+   item.classList.toggle("active", selectedServices.includes(item.getAttribute("data-service")));
+ });
+ document.querySelectorAll('#serviceChecklist input[type="checkbox"]').forEach(cb=>{
+   cb.checked=selectedServices.includes(cb.value);
+ });
+ document.getElementById("service").value=selectedServices.join(", ");
+ const total=calcServicePrice(selectedServices.join(", "));
+ const row=document.getElementById("serviceTotalRow");
+ if(row){
+   row.style.display=selectedServices.length?"block":"none";
+   document.getElementById("serviceTotalValue").textContent="R$ "+total;
+ }
+}
 let current=new Date(); current.setDate(1);
 let selected=null;
 const today=new Date(); today.setHours(0,0,0,0);
@@ -609,12 +661,6 @@ async function renderCalendar(){
    if(selected&&date.getTime()===selected.getTime())b.classList.add("selected");
    days.appendChild(b);
  }
-}
-function pickService(el,name){
- document.querySelectorAll(".catalog-item").forEach(i=>i.classList.remove("active"));
- el.classList.add("active");
- document.getElementById("service").value=name;
- showToast("Serviço selecionado: "+name+". Agora escolha o dia no calendário.");
 }
 function isoDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
 async function renderAgendaCalendar(){
@@ -732,6 +778,7 @@ function showToast(msg){const t=document.getElementById("toast");t.textContent=m
 function openBookingModal(){
  const date=document.getElementById("dateField").value,time=document.getElementById("time").value;
  if(!date||!time){showToast("Escolha um dia e um horário no calendário.");return}
+ syncServiceUI();
  document.getElementById("modalSummary").innerHTML=`<div><strong>${date}</strong> às <strong>${time}</strong></div>`;
  document.getElementById("modalStepForm").style.display="block";
  document.getElementById("modalStepDone").style.display="none";
@@ -740,8 +787,8 @@ function openBookingModal(){
 function closeBookingModal(){document.getElementById("bookingModal").classList.remove("open")}
 async function book(){
  const date=document.getElementById("dateField").value,name=document.getElementById("modalName").value.trim();
- const phone=document.getElementById("modalPhone").value.trim(),time=document.getElementById("time").value,service=document.getElementById("service").value;
- if(!date||!name||!phone||!time||!service){showToast("Preencha o serviço, seu nome e WhatsApp para confirmar.");return}
+ const phone=document.getElementById("modalPhone").value.trim(),time=document.getElementById("time").value,service=selectedServices.join(", ");
+ if(!date||!name||!phone||!time||!selectedServices.length){showToast("Escolha ao menos um serviço, seu nome e WhatsApp para confirmar.");return}
  document.getElementById("name").value=name;
  document.getElementById("phone").value=phone;
  if(SHEET_API_URL){
@@ -766,7 +813,8 @@ async function book(){
      showToast("Não consegui salvar o agendamento na planilha (mas você já pode continuar pelo WhatsApp). Veja o console (F12) para detalhes.");
    }
  }
- const price=servicePrices[service]?`R$ ${servicePrices[service]},00`:"a combinar";
+ const totalVal=calcServicePrice(service);
+ const price=totalVal?`R$ ${totalVal},00`:"a combinar";
  document.getElementById("modalSummaryDone").innerHTML=`<div><strong>${date}</strong> às <strong>${time}</strong></div><div>${service}</div><div>${price}</div>`;
  document.getElementById("modalStepForm").style.display="none";
  document.getElementById("modalStepDone").style.display="block";
@@ -774,11 +822,14 @@ async function book(){
 function finalizeWhatsapp(){
  const date=document.getElementById("dateField").value,name=document.getElementById("name").value;
  const phone=document.getElementById("phone").value,time=document.getElementById("time").value,service=document.getElementById("service").value;
- const price=servicePrices[service]?`R$${servicePrices[service]},00`:"a combinar";
+ const totalVal=calcServicePrice(service);
+ const price=totalVal?`R$${totalVal},00`:"a combinar";
  const message=`✅*Horário marcado*\n-As ${time}\n-Dia ${date}\n*Procedimento* ${service}\n*Cliente* ${name}\n*Valor:* ${price}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
  window.location.href=`https://wa.me/${number}?text=${encodeURIComponent(message)}`;
  closeBookingModal();
+ selectedServices=[];
+ syncServiceUI();
 }
 async function renderDayAgenda(date){
  const list=document.getElementById("dayAgendaList");
@@ -894,7 +945,8 @@ function renderAdminCalendar(items){
     const row=document.createElement("div");
     row.className="admin-calendar-slot "+(item?"busy":"free");
     if(item){
-      const price=servicePrices[item.service]?`R$ ${servicePrices[item.service]},00`:"a combinar";
+      const itemTotal=calcServicePrice(item.service);
+      const price=itemTotal?`R$ ${itemTotal},00`:"a combinar";
       row.innerHTML=`
         <div class="admin-slot-time">${time}</div>
         <div class="admin-slot-info">
