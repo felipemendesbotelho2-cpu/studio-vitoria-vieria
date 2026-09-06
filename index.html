@@ -730,7 +730,7 @@ function finalizeWhatsapp(){
  const date=document.getElementById("dateField").value,name=document.getElementById("name").value;
  const phone=document.getElementById("phone").value,time=document.getElementById("time").value,service=document.getElementById("service").value;
  const price=servicePrices[service]?`R$${servicePrices[service]},00`:"a combinar";
- const message=`✅*Horário marcado*\n-As ${time}\n-Dia ${date}\n*Procedimento* ${service}\n*Cliente* ${name}\n*Valor:* ${price}`;
+ const message=`\u2705 *Horário marcado*\n-As ${time}\n-Dia ${date}\n*Procedimento* ${service}\n*Cliente* ${name}\n*Valor:* ${price}`;
  const number="5563993008899"; // TROQUE pelo WhatsApp do studio
  window.location.href=`https://wa.me/${number}?text=${encodeURIComponent(message)}`;
  closeBookingModal();
