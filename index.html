@@ -610,6 +610,10 @@ function calcServiceDuration(serviceStr){
  if(!serviceStr) return 0;
  return String(serviceStr).split(",").map(s=>s.trim()).reduce((sum,s)=>sum+(serviceDurations[s]||0),0);
 }
+function timeToMin(t){ const p=String(t||"").split(":"); return (parseInt(p[0],10)||0)*60+(parseInt(p[1],10)||0); }
+function minToTime(m){ const h=Math.floor(m/60), mm=((m%60)+60)%60; return String(h).padStart(2,"0")+":"+String(mm).padStart(2,"0"); }
+function getBookingInterval(b){ const start=timeToMin(b.time); const dur=calcServiceDuration(b.service)||60; return {start,end:start+dur,ref:b}; }
+function intervalsOverlap(aStart,aEnd,bStart,bEnd){ return aStart<bEnd && bStart<aEnd; }
 function toggleService(name){
  const idx=selectedServices.indexOf(name);
  if(idx>-1){ selectedServices.splice(idx,1); showToast("Removido: "+name); }
@@ -752,21 +756,34 @@ function generateSlots(){
  return arr;
 }
 let bookedForDay=[];
-async function fetchBookedTimes(date){
+let dayIntervals=[];
+async function fetchDayIntervals(date){
  if(!SHEET_API_URL) return [];
  try{
    const iso=isoDate(date);
    const data=await fetchAllBookings();
-   return data.filter(r=>r.date===iso && String(r.status||"").toLowerCase()!=="cancelado").map(r=>r.time);
+   return data.filter(r=>r.date===iso && String(r.status||"").toLowerCase()!=="cancelado").map(getBookingInterval);
  }catch(err){ console.error("Erro ao buscar horários ocupados:",err); showToast("Não consegui verificar os horários ocupados. Veja o console (F12) para detalhes."); return []; }
+}
+async function fetchBookedTimes(date){
+ // Retorna todos os horários da grade cobertos pela duração de algum agendamento
+ // (ex.: agendamento às 8h com 2h de duração ocupa também o horário das 9h).
+ const intervals=await fetchDayIntervals(date);
+ return generateSlots().filter(t=>{
+   const tMin=timeToMin(t);
+   return intervals.some(iv=>tMin>=iv.start && tMin<iv.end);
+ });
 }
 function renderSlots(){
  const wrap=document.getElementById("tpSlots"); wrap.innerHTML="";
+ const selDuration=calcServiceDuration(document.getElementById("service").value)||60;
  generateSlots().forEach(t=>{
    const b=document.createElement("button");
    b.type="button"; b.className="tp-slot"; b.textContent=t;
-   if(bookedForDay.includes(t)){
-     b.classList.add("taken"); b.disabled=true; b.title="Horário já reservado";
+   const tMin=timeToMin(t), endMin=tMin+selDuration;
+   const conflict=dayIntervals.some(iv=>intervalsOverlap(tMin,endMin,iv.start,iv.end));
+   if(conflict){
+     b.classList.add("taken"); b.disabled=true; b.title="Horário ocupado ou não cabe antes do próximo agendamento";
    }else{
      if(document.getElementById("time").value===t) b.classList.add("active");
      b.onclick=()=>chooseTime(t);
@@ -779,7 +796,8 @@ async function openTimePopover(){
  document.getElementById("tpDate").textContent=document.getElementById("dateField").value;
  document.getElementById("timePopover").classList.add("open");
  const wrap=document.getElementById("tpSlots"); wrap.innerHTML='<div class="tp-loading">Carregando horários...</div>';
- bookedForDay=await fetchBookedTimes(selected);
+ dayIntervals=await fetchDayIntervals(selected);
+ bookedForDay=generateSlots().filter(t=>{const tMin=timeToMin(t); return dayIntervals.some(iv=>tMin>=iv.start&&tMin<iv.end);});
  renderSlots();
 }
 function closeTimePopover(){document.getElementById("timePopover").classList.remove("open")}
@@ -787,7 +805,10 @@ function chooseTime(t){document.getElementById("time").value=t;closeTimePopover(
 function confirmCustomTime(){
  const v=document.getElementById("customTime").value;
  if(!v){showToast("Escolha um horário para continuar.");return}
- if(bookedForDay.includes(v)){showToast("Esse horário já está ocupado. Escolha outro.");return}
+ const selDuration=calcServiceDuration(document.getElementById("service").value)||60;
+ const vMin=timeToMin(v), vEnd=vMin+selDuration;
+ const conflict=dayIntervals.some(iv=>intervalsOverlap(vMin,vEnd,iv.start,iv.end));
+ if(conflict){showToast("Esse horário já está ocupado ou não cabe antes do próximo agendamento. Escolha outro.");return}
  document.getElementById("time").value=v;
  closeTimePopover();
  openBookingModal();
@@ -967,13 +988,16 @@ function renderAdminCalendar(items){
     `${formatDateBR(dateIso)} • ${dayItems.length} agendamento${dayItems.length===1?"":"s"}`;
 
   const byTime={}; dayItems.forEach(x=>byTime[x.time]=x);
+  const dayIntervalsAdmin=dayItems.map(getBookingInterval);
   const list=document.getElementById("adminAgendaList");
   list.innerHTML="";
 
   generateSlots().forEach(time=>{
     const item=byTime[time];
+    const tMin=timeToMin(time);
+    const covering=item?null:dayIntervalsAdmin.find(iv=>tMin>=iv.start&&tMin<iv.end);
     const row=document.createElement("div");
-    row.className="admin-calendar-slot "+(item?"busy":"free");
+    row.className="admin-calendar-slot "+((item||covering)?"busy":"free");
     if(item){
       const itemTotal=calcServicePrice(item.service);
       const price=itemTotal?`R$ ${itemTotal},00`:"a combinar";
@@ -990,6 +1014,15 @@ function renderAdminCalendar(items){
           <button class="admin-cancel-mini" type="button">Cancelar</button>
         </div>`;
       row.querySelector(".admin-cancel-mini").onclick=()=>cancelBooking(item.row);
+    }else if(covering){
+      const ref=covering.ref;
+      row.innerHTML=`
+        <div class="admin-slot-time">${time}</div>
+        <div class="admin-slot-info">
+          <strong>${escapeHtml(ref.name||"Cliente")}</strong>
+          <small>Em atendimento (começou às ${ref.time}) • até ${minToTime(covering.end)}</small>
+        </div>
+        <div class="admin-slot-actions"></div>`;
     }else{
       row.innerHTML=`
         <div class="admin-slot-time">${time}</div>
