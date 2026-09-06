@@ -213,6 +213,32 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 .admin-whatsapp{border:1px solid #cfe3d6;background:#eef8f1;color:#2f7a4d;padding:5px 8px;border-radius:8px;font-size:10px;font-weight:700;text-decoration:none}
 .admin-cancel-mini{border:0;background:#c0392b;color:#fff;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:700}
 .admin-agenda-note{font-size:10.5px;color:var(--muted);text-align:center;padding:8px}
+
+/* Agenda visual da profissional */
+.professional-agenda{border:1px solid #eadfcf;border-radius:20px;background:#fffdf9;overflow:hidden;margin-top:8px}
+.professional-agenda-top{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;gap:8px;padding:13px 12px;background:linear-gradient(180deg,#fffaf0,#fffdf9);border-bottom:1px solid #eee4d4}
+.professional-agenda-date{text-align:center}
+.professional-agenda-date span{display:block;font-size:8.5px;letter-spacing:1.7px;font-weight:900;color:var(--primary);margin-bottom:2px}
+.professional-agenda-date strong{display:block;font-family:var(--serif);font-size:21px;font-weight:600;color:#3c3029}
+.professional-agenda-date small{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
+.professional-agenda-header{display:grid;grid-template-columns:72px 1fr 70px;gap:10px;padding:8px 12px;background:#f7f0e5;color:#9a866d;font-size:8px;font-weight:900;letter-spacing:1px}
+.professional-agenda-list{display:grid;gap:0;max-height:440px;overflow:auto}
+.professional-agenda-list .admin-calendar-slot{display:grid;grid-template-columns:72px 1fr 70px;gap:10px;align-items:center;border:0;border-bottom:1px solid #eee7dc;border-radius:0;background:#fff;padding:12px}
+.professional-agenda-list .admin-calendar-slot.busy{background:#fffaf2;border-left:4px solid #caa45d}
+.professional-agenda-list .admin-calendar-slot.free{background:#fbfdfb;border-left:4px solid #b9ddc5}
+.professional-agenda-list .admin-slot-time{border-right:1px solid #eee4d7;padding-right:10px;font-size:14px}
+.professional-agenda-list .admin-slot-info{padding-left:2px}
+.professional-agenda-list .admin-slot-info strong{font-size:12.5px;color:#3d332d}
+.professional-agenda-list .admin-slot-info small{font-size:10px;margin-top:2px}
+.professional-agenda-list .admin-slot-actions{justify-content:flex-end;flex-wrap:wrap}
+.professional-agenda-list .admin-slot-free{background:#eef8f1;border-radius:999px;padding:5px 8px;text-align:center}
+.professional-agenda-list .admin-whatsapp{font-size:9px;padding:5px 7px}
+.professional-agenda-list .admin-cancel-mini{font-size:9px;padding:5px 7px}
+@media(max-width:520px){
+ .professional-agenda-header{grid-template-columns:58px 1fr 58px}
+ .professional-agenda-list .admin-calendar-slot{grid-template-columns:58px 1fr;gap:8px}
+ .professional-agenda-list .admin-slot-actions{grid-column:2;justify-content:flex-start}
+}
 @media(max-width:520px){
  .admin-agenda-panel{max-width:none}
  .admin-calendar-slot{grid-template-columns:48px 1fr;gap:8px}
@@ -317,10 +343,28 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
   </div>
   <div id="adminPanelBox" class="admin-box admin-agenda-panel" style="display:none">
     <div class="admin-panel-head">
-      <h4>Agendamentos</h4>
-      <button type="button" class="admin-refresh" onclick="loadAdminBookings()">Atualizar</button>
+      <div>
+        <span class="admin-eyebrow">Agenda profissional</span>
+        <h4>Meus agendamentos</h4>
+      </div>
+      <button type="button" class="admin-refresh" onclick="loadAdminBookings()">↻ Atualizar</button>
     </div>
-    <div id="adminAgendaList"></div>
+
+    <div class="professional-agenda">
+      <div class="professional-agenda-top">
+        <button type="button" class="admin-nav-btn" onclick="changeAdminAgendaDay(-1)" aria-label="Dia anterior">‹</button>
+        <div class="professional-agenda-date">
+          <span>AGENDA DO DIA</span>
+          <strong id="adminAgendaDate">Hoje</strong>
+          <small id="adminAgendaSummary">Carregando...</small>
+        </div>
+        <button type="button" class="admin-nav-btn" onclick="changeAdminAgendaDay(1)" aria-label="Próximo dia">›</button>
+      </div>
+      <div class="professional-agenda-header">
+        <span>HORÁRIO</span><span>CLIENTE / SERVIÇO</span><span>STATUS</span>
+      </div>
+      <div id="adminAgendaList" class="professional-agenda-list"></div>
+    </div>
   </div>
   </div>
 </div>
@@ -743,10 +787,12 @@ async function loadAdminBookings(){
     }
     document.getElementById("adminLoginBox").style.display="none";
     document.getElementById("adminPanelBox").style.display="block";
-    renderAdminCalendar(data||[]);
+    renderAdminCalendar(Array.isArray(data)?data:[]);
   }catch(err){
     console.error("Erro ao carregar agendamentos:",err);
-    list.innerHTML='<div class="admin-empty">Erro ao carregar a agenda.</div>';
+    document.getElementById("adminLoginBox").style.display="block";
+    document.getElementById("adminPanelBox").style.display="none";
+    list.innerHTML='<div class="admin-empty">Não foi possível carregar a agenda. Confira a conexão com a planilha.</div>';
   }
 }
 
