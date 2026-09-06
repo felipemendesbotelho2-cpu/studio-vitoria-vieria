@@ -385,7 +385,7 @@ const today=new Date(); today.setHours(0,0,0,0);
 async function fetchAllBookings(){
  if(!SHEET_API_URL) return [];
  try{
-   const res=await fetch(SHEET_API_URL);
+   const res=await fetch(`${SHEET_API_URL}?_=${Date.now()}`,{cache:"no-store"});
    if(!res.ok) throw new Error("HTTP "+res.status);
    return await res.json();
  }catch(err){ console.error("Erro ao buscar agendamentos:",err); showToast("Não consegui carregar a agenda da planilha. Veja o console (F12) para detalhes."); return []; }
@@ -441,7 +441,7 @@ async function fetchBookedTimes(date){
  if(!SHEET_API_URL) return [];
  try{
    const iso=isoDate(date);
-   const res=await fetch(SHEET_API_URL);
+   const res=await fetch(`${SHEET_API_URL}?_=${Date.now()}`,{cache:"no-store"});
    if(!res.ok) throw new Error("HTTP "+res.status);
    const data=await res.json();
    return data.filter(r=>r.date===iso && r.status!=="Cancelado").map(r=>r.time);
@@ -577,7 +577,7 @@ async function loadAdminBookings(){
  const list=document.getElementById("adminList");
  list.innerHTML='<div class="admin-empty">Carregando agendamentos...</div>';
  try{
-   const res=await fetch(`${SHEET_API_URL}?admin=1&key=${encodeURIComponent(adminKey)}`);
+   const res=await fetch(`${SHEET_API_URL}?admin=1&key=${encodeURIComponent(adminKey)}&_=${Date.now()}`,{cache:"no-store"});
    const data=await res.json();
    if(data && data.error){
      showToast(data.error);
