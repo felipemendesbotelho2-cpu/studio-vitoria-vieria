@@ -193,6 +193,32 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
 .admin-cancel-btn{border:0;background:#c0392b;color:#fff;padding:6px 10px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:500;flex-shrink:0}
 .admin-cancel-btn:hover{background:#a5301f}
 .admin-empty{color:var(--muted);font-size:12px;text-align:center;padding:14px 0}
+
+.admin-agenda-panel{max-width:720px}
+.admin-eyebrow{display:block;color:var(--primary);font-size:9px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:1px}
+.admin-agenda-toolbar{display:grid;grid-template-columns:38px 1fr 38px;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:15px;padding:8px 10px;margin:10px 0 12px;text-align:center}
+.admin-agenda-toolbar strong{display:block;font-family:var(--serif);font-size:20px;font-weight:600}
+.admin-agenda-toolbar span{display:block;color:var(--muted);font-size:10.5px}
+.admin-nav-btn{width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:10px;color:var(--primary-dark);font-size:20px;cursor:pointer}
+.admin-calendar-list{display:grid;gap:7px;max-height:430px;overflow-y:auto}
+.admin-calendar-slot{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.admin-calendar-slot.busy{border-color:#ead6b8;background:#fffaf1}
+.admin-calendar-slot.free{background:#f7fbf8;border-color:#d6e9dc}
+.admin-slot-time{font-size:14px;font-weight:900;color:var(--primary-dark);text-align:center;padding-right:8px;border-right:1px solid var(--line)}
+.admin-slot-info{min-width:0;font-size:11px;line-height:1.35}
+.admin-slot-info strong{font-size:12.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-slot-info small{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-slot-free{font-size:10px;color:#2f7a4d;font-weight:800}
+.admin-slot-actions{display:flex;gap:5px;align-items:center}
+.admin-whatsapp{border:1px solid #cfe3d6;background:#eef8f1;color:#2f7a4d;padding:5px 8px;border-radius:8px;font-size:10px;font-weight:700;text-decoration:none}
+.admin-cancel-mini{border:0;background:#c0392b;color:#fff;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:700}
+.admin-agenda-note{font-size:10.5px;color:var(--muted);text-align:center;padding:8px}
+@media(max-width:520px){
+ .admin-agenda-panel{max-width:none}
+ .admin-calendar-slot{grid-template-columns:48px 1fr;gap:8px}
+ .admin-slot-actions{grid-column:2;justify-content:flex-start}
+}
+
 .admin-day-sep{display:flex;align-items:center;gap:8px;margin:14px 0 8px}
 .admin-day-sep:first-child{margin-top:0}
 .admin-day-sep span{font-size:11.5px;font-weight:800;color:var(--primary-dark);letter-spacing:.3px;white-space:nowrap}
@@ -240,7 +266,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
       <button type="button" onclick="adminLogin()">Entrar</button>
     </div>
   </div>
-  <div id="adminPanelBox" class="admin-box" style="display:none">
+  <div id="adminPanelBox" class="admin-box admin-agenda-panel" style="display:none">
     <div class="admin-panel-head">
       <h4>Agendamentos</h4>
       <button type="button" class="admin-refresh" onclick="loadAdminBookings()">Atualizar</button>
@@ -625,88 +651,133 @@ renderDayAgenda(today);
 
 // ====== ÁREA DA PROFISSIONAL ======
 let adminKey=null;
+let adminAgendaDate=new Date(); adminAgendaDate.setHours(0,0,0,0);
+
 function toggleAdminBox(){
- const wrap=document.getElementById("adminBoxWrap");
- wrap.style.display=wrap.style.display==="none"?"block":"none";
+  const wrap=document.getElementById("adminBoxWrap");
+  wrap.style.display=wrap.style.display==="none"?"block":"none";
 }
+
 function adminLogin(){
- const key=document.getElementById("adminPass").value.trim();
- if(!key){showToast("Digite a senha.");return}
- if(!SHEET_API_URL){showToast("Configure a URL da planilha primeiro.");return}
- adminKey=key;
- loadAdminBookings();
+  const key=document.getElementById("adminPass").value.trim();
+  if(!key){showToast("Digite a senha.");return}
+  if(!SHEET_API_URL){showToast("Configure a URL da planilha primeiro.");return}
+  adminKey=key; loadAdminBookings();
 }
+
 async function loadAdminBookings(){
- const list=document.getElementById("adminList");
- list.innerHTML='<div class="admin-empty">Carregando agendamentos...</div>';
- try{
-   const res=await fetch(`${SHEET_API_URL}?admin=1&key=${encodeURIComponent(adminKey)}&_=${Date.now()}`,{cache:"no-store"});
-   const data=await res.json();
-   if(data && data.error){
-     showToast(data.error);
-     document.getElementById("adminLoginBox").style.display="block";
-     document.getElementById("adminPanelBox").style.display="none";
-     adminKey=null;
-     return;
-   }
-   document.getElementById("adminLoginBox").style.display="none";
-   document.getElementById("adminPanelBox").style.display="block";
-   renderAdminBookings(data);
- }catch(err){
-   console.error("Erro ao carregar agendamentos:",err);
-   list.innerHTML='<div class="admin-empty">Erro ao carregar agendamentos.</div>';
- }
+  const list=document.getElementById("adminAgendaList");
+  list.innerHTML='<div class="admin-empty">Carregando agenda...</div>';
+  try{
+    const res=await fetch(`${SHEET_API_URL}?admin=1&key=${encodeURIComponent(adminKey)}&_=${Date.now()}`,{cache:"no-store"});
+    const data=await res.json();
+    if(data && data.error){
+      showToast(data.error);
+      document.getElementById("adminLoginBox").style.display="block";
+      document.getElementById("adminPanelBox").style.display="none";
+      adminKey=null; return;
+    }
+    document.getElementById("adminLoginBox").style.display="none";
+    document.getElementById("adminPanelBox").style.display="block";
+    renderAdminCalendar(data||[]);
+  }catch(err){
+    console.error("Erro ao carregar agendamentos:",err);
+    list.innerHTML='<div class="admin-empty">Erro ao carregar a agenda.</div>';
+  }
 }
+
 function waDigits(phone){
- let d=(phone||"").replace(/\D/g,"");
- if(d.length<=11)d="55"+d;
- return d;
+  let d=(phone||"").replace(/\D/g,"");
+  if(d.length<=11)d="55"+d;
+  return d;
 }
 function formatDateBR(iso){
- if(!iso) return iso;
- const parts=String(iso).split("-");
- if(parts.length!==3) return iso;
- return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  if(!iso)return iso;
+  const p=String(iso).split("-");
+  return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:iso;
 }
-function renderAdminBookings(items){
- const list=document.getElementById("adminList");
- list.innerHTML="";
- if(!items||items.length===0){ list.innerHTML='<div class="admin-empty">Nenhum agendamento ainda.</div>'; return; }
- items.sort((a,b)=> (a.date+a.time)<(b.date+b.time)?-1:1);
- let lastDate=null;
- items.forEach(item=>{
-   if(item.date!==lastDate){
-     lastDate=item.date;
-     const sep=document.createElement("div");
-     sep.className="admin-day-sep";
-     sep.innerHTML=`<span>📅 ${formatDateBR(item.date)}</span>`;
-     list.appendChild(sep);
-   }
-   const cancelled=item.status==="Cancelado";
-   const price=servicePrices[item.service]?`R$${servicePrices[item.service]},00`:"a combinar";
-   const row=document.createElement("div");
-   row.className="admin-row"+(cancelled?" cancelled":"");
-   row.innerHTML=`<div>✅<strong>Horário marcado</strong><br>-As ${item.time}<br>-Dia ${formatDateBR(item.date)}<br><strong>Procedimento</strong> ${item.service}<br><strong>Cliente</strong> ${item.name}<br><strong>Valor:</strong> ${price}<br>📱 <a href="https://wa.me/${waDigits(item.phone)}" target="_blank" style="color:var(--primary-dark);text-decoration:underline">${item.phone||"-"}</a><br><span class="admin-status">${item.status||"Confirmado"}</span></div>`;
-   if(!cancelled){
-     const btn=document.createElement("button");
-     btn.className="admin-cancel-btn"; btn.textContent="Cancelar";
-     btn.onclick=()=>cancelBooking(item.row);
-     row.appendChild(btn);
-   }
-   list.appendChild(row);
- });
+function adminDateLabel(date){
+  const d=new Date(date); d.setHours(0,0,0,0);
+  const n=new Date(); n.setHours(0,0,0,0);
+  const diff=Math.round((d-n)/86400000);
+  if(diff===0)return "Hoje";
+  if(diff===1)return "Amanhã";
+  if(diff===-1)return "Ontem";
+  return d.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long"});
 }
+function escapeHtml(v){
+  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+
+function renderAdminCalendar(items){
+  // CANCELADOS NÃO APARECEM: ao cancelar e recarregar, o horário volta a ficar livre.
+  const active=(items||[]).filter(x=>String(x.status||"").toLowerCase()!=="cancelado");
+  const dateIso=isoDate(adminAgendaDate);
+  const dayItems=active.filter(x=>x.date===dateIso);
+  dayItems.sort((a,b)=>(a.time||"").localeCompare(b.time||""));
+
+  document.getElementById("adminAgendaDate").textContent=adminDateLabel(adminAgendaDate);
+  document.getElementById("adminAgendaSummary").textContent=
+    `${formatDateBR(dateIso)} • ${dayItems.length} agendamento${dayItems.length===1?"":"s"}`;
+
+  const byTime={}; dayItems.forEach(x=>byTime[x.time]=x);
+  const list=document.getElementById("adminAgendaList");
+  list.innerHTML="";
+
+  generateSlots().forEach(time=>{
+    const item=byTime[time];
+    const row=document.createElement("div");
+    row.className="admin-calendar-slot "+(item?"busy":"free");
+    if(item){
+      const price=servicePrices[item.service]?`R$ ${servicePrices[item.service]},00`:"a combinar";
+      row.innerHTML=`
+        <div class="admin-slot-time">${time}</div>
+        <div class="admin-slot-info">
+          <strong>${escapeHtml(item.name||"Cliente")}</strong>
+          <small>${escapeHtml(item.service||"Serviço")} • ${price}</small>
+        </div>
+        <div class="admin-slot-actions">
+          ${item.phone?`<a class="admin-whatsapp" href="https://wa.me/${waDigits(item.phone)}" target="_blank">WhatsApp</a>`:""}
+          <button class="admin-cancel-mini" type="button">Cancelar</button>
+        </div>`;
+      row.querySelector(".admin-cancel-mini").onclick=()=>cancelBooking(item.row);
+    }else{
+      row.innerHTML=`
+        <div class="admin-slot-time">${time}</div>
+        <div class="admin-slot-info"><strong>Horário livre</strong><small>Disponível para agendamento</small></div>
+        <div class="admin-slot-free">LIVRE</div>`;
+    }
+    list.appendChild(row);
+  });
+
+  if(dayItems.length===0){
+    const note=document.createElement("div");
+    note.className="admin-agenda-note";
+    note.textContent="Nenhum agendamento confirmado para este dia.";
+    list.prepend(note);
+  }
+}
+
+function changeAdminAgendaDay(delta){
+  adminAgendaDate.setDate(adminAgendaDate.getDate()+delta);
+  if(adminKey)loadAdminBookings();
+}
+
 async function cancelBooking(row){
- if(!confirm("Cancelar esse agendamento e liberar o horário?"))return;
- try{
-   const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({action:"cancel",key:adminKey,row})});
-   const result=await res.json();
-   if(result.success){ showToast("Agendamento cancelado. Horário liberado!"); loadAdminBookings(); renderCalendar(); renderDayAgenda(selected||today); }
-   else{ showToast(result.message||"Não foi possível cancelar."); }
- }catch(err){
-   console.error("Erro ao cancelar:",err);
-   showToast("Erro ao cancelar. Tente novamente.");
- }
+  if(!confirm("Cancelar esse agendamento e liberar o horário?"))return;
+  try{
+    const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({action:"cancel",key:adminKey,row})});
+    const result=await res.json();
+    if(result.success){
+      showToast("Agendamento cancelado. Horário liberado!");
+      await loadAdminBookings();
+      await renderCalendar();
+      await renderDayAgenda(selected||today);
+    }else showToast(result.message||"Não foi possível cancelar.");
+  }catch(err){
+    console.error("Erro ao cancelar:",err);
+    showToast("Erro ao cancelar. Tente novamente.");
+  }
 }
 </script>
 </body>
