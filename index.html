@@ -61,6 +61,11 @@ nav{display:flex;gap:26px;color:#604d57;font-size:14px;font-weight:600}
 .day-agenda-legend .dot.free{background:var(--success)}
 .day-agenda-legend .dot.busy{background:#c0392b}
 .day-agenda-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;position:relative}
+.agenda-pick-btn{display:inline-flex;align-items:center;gap:7px;background:var(--soft);color:var(--primary-dark);border:1px solid #e0cd9e;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.agenda-pick-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.agenda-pick-btn svg{width:16px;height:16px;flex-shrink:0}
+.agenda-cal-popover{display:none;position:relative;z-index:20;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.agenda-cal-popover.open{display:block}
 .da-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 4px;border-radius:13px;border:1px solid #bfe3cc;background:#eef8f1;text-align:center}
 .da-dot{display:none}
 .da-time{font-size:13px;font-weight:800;width:auto;color:#2f7a4d}
@@ -256,7 +261,20 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
             <span class="day-agenda-eyebrow">Agenda do dia</span>
             <h3 class="day-agenda-date" id="dayAgendaDate">Hoje</h3>
           </div>
-          <div class="day-agenda-legend"><span class="dot free"></span>Livre<span class="dot busy"></span>Ocupado</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div class="day-agenda-legend"><span class="dot free"></span>Livre<span class="dot busy"></span>Ocupado</div>
+            <button type="button" class="agenda-pick-btn" id="agendaPickBtn" onclick="toggleAgendaCalendar()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>
+              Ver outro dia
+            </button>
+          </div>
+        </div>
+        <div class="agenda-cal-popover" id="agendaCalPopover">
+          <div class="calendar-top">
+            <button class="month-btn" type="button" id="agendaCalPrev">‹</button><h3 id="agendaCalMonthTitle"></h3><button class="month-btn" type="button" id="agendaCalNext">›</button>
+          </div>
+          <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
+          <div class="days" id="agendaCalDays"></div>
         </div>
         <div class="day-agenda-timeline" id="dayAgendaList"></div>
       </div>
@@ -381,6 +399,8 @@ const servicePrices={
 let current=new Date(); current.setDate(1);
 let selected=null;
 const today=new Date(); today.setHours(0,0,0,0);
+let agendaViewDate=today;
+let agendaCalCurrent=new Date(); agendaCalCurrent.setDate(1);
 
 async function fetchAllBookings(){
  if(!SHEET_API_URL) return [];
@@ -423,6 +443,49 @@ function pickService(el,name){
  showToast("Serviço selecionado: "+name+". Agora escolha o dia no calendário.");
 }
 function isoDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
+async function renderAgendaCalendar(){
+ const y=agendaCalCurrent.getFullYear(), m=agendaCalCurrent.getMonth();
+ document.getElementById("agendaCalMonthTitle").textContent=monthNames[m]+" "+y;
+ const wrap=document.getElementById("agendaCalDays"); wrap.innerHTML="";
+ const first=new Date(y,m,1).getDay();
+ const total=new Date(y,m+1,0).getDate();
+ const totalSlots=generateSlots().length;
+ const allBookings=await fetchAllBookings();
+ const countByDate={};
+ allBookings.forEach(b=>{ if(b.status==="Cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
+ for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";wrap.appendChild(e)}
+ for(let d=1;d<=total;d++){
+   let date=new Date(y,m,d);date.setHours(0,0,0,0);
+   let b=document.createElement("button");b.type="button";b.className="day";b.textContent=d;
+   const count=countByDate[isoDate(date)]||0;
+   b.classList.add(count>=totalSlots?"full":(count>0?"available":""));
+   b.onclick=()=>pickAgendaDay(date);
+   if(date.getTime()===agendaViewDate.getTime())b.classList.add("selected");
+   if(date.getTime()===today.getTime())b.style.fontWeight="900";
+   wrap.appendChild(b);
+ }
+}
+function pickAgendaDay(date){
+ agendaViewDate=date;
+ renderDayAgenda(date);
+ closeAgendaCalendar();
+}
+function toggleAgendaCalendar(){
+ const pop=document.getElementById("agendaCalPopover");
+ if(pop.classList.contains("open")){ closeAgendaCalendar(); return; }
+ agendaCalCurrent=new Date(agendaViewDate.getFullYear(),agendaViewDate.getMonth(),1);
+ renderAgendaCalendar();
+ pop.classList.add("open");
+}
+function closeAgendaCalendar(){document.getElementById("agendaCalPopover").classList.remove("open")}
+document.getElementById("agendaCalPrev").onclick=()=>{agendaCalCurrent.setMonth(agendaCalCurrent.getMonth()-1);renderAgendaCalendar()}
+document.getElementById("agendaCalNext").onclick=()=>{agendaCalCurrent.setMonth(agendaCalCurrent.getMonth()+1);renderAgendaCalendar()}
+document.addEventListener("click",(e)=>{
+ const pop=document.getElementById("agendaCalPopover");
+ if(!pop.classList.contains("open"))return;
+ if(pop.contains(e.target)||e.target.closest("#agendaPickBtn"))return;
+ closeAgendaCalendar();
+});
 function selectDate(date){
  selected=date;
  document.getElementById("dateField").value=date.toLocaleDateString("pt-BR");
