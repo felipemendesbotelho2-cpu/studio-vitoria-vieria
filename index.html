@@ -578,26 +578,32 @@ function pickService(el,name){
 }
 function isoDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
 async function renderAgendaCalendar(){
- const y=agendaCalCurrent.getFullYear(), m=agendaCalCurrent.getMonth();
- document.getElementById("agendaCalMonthTitle").textContent=monthNames[m]+" "+y;
- const wrap=document.getElementById("agendaCalDays"); wrap.innerHTML="";
- const first=new Date(y,m,1).getDay();
- const total=new Date(y,m+1,0).getDate();
- const totalSlots=generateSlots().length;
- const allBookings=await fetchAllBookings();
- const countByDate={};
- allBookings.forEach(b=>{ if(b.status==="Cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
- for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";wrap.appendChild(e)}
- for(let d=1;d<=total;d++){
-   let date=new Date(y,m,d);date.setHours(0,0,0,0);
-   let b=document.createElement("button");b.type="button";b.className="day";b.textContent=d;
-   const count=countByDate[isoDate(date)]||0;
-   b.classList.add(count>=totalSlots?"full":(count>0?"available":""));
-   b.onclick=()=>pickAgendaDay(date);
-   if(date.getTime()===agendaViewDate.getTime())b.classList.add("selected");
-   if(date.getTime()===today.getTime())b.style.fontWeight="900";
-   wrap.appendChild(b);
- }
+  const y=agendaCalCurrent.getFullYear(), m=agendaCalCurrent.getMonth();
+  document.getElementById("agendaCalMonthTitle").textContent=monthNames[m]+" de "+y;
+  const wrap=document.getElementById("agendaCalDays"); wrap.innerHTML="";
+  const first=new Date(y,m,1).getDay();
+  const total=new Date(y,m+1,0).getDate();
+  const totalSlots=generateSlots().length;
+  const allBookings=await fetchAllBookings();
+  const countByDate={};
+  allBookings.forEach(b=>{ if(String(b.status||"").toLowerCase()==="cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
+  for(let i=0;i<first;i++){
+    const e=document.createElement("div"); e.className="day empty"; wrap.appendChild(e);
+  }
+  for(let d=1;d<=total;d++){
+    const date=new Date(y,m,d); date.setHours(0,0,0,0);
+    const dateKey=isoDate(date), count=countByDate[dateKey]||0;
+    const isPast=date.getTime()<today.getTime(), isSunday=date.getDay()===0;
+    const isToday=date.getTime()===today.getTime(), isSelected=date.getTime()===agendaViewDate.getTime();
+    const b=document.createElement("button");
+    b.type="button"; b.className="day"; b.textContent=String(d);
+    b.setAttribute("aria-label",date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}));
+    if(isPast||isSunday){ b.classList.add("disabled"); b.disabled=true; }
+    else { b.classList.add(count>=totalSlots?"full":(count>0?"available":"")); b.onclick=()=>pickAgendaDay(date); }
+    if(isSelected)b.classList.add("selected");
+    if(isToday)b.classList.add("today");
+    wrap.appendChild(b);
+  }
 }
 function pickAgendaDay(date){
  agendaViewDate=date;
