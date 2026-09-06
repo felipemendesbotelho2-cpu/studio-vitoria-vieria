@@ -244,13 +244,62 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
  h2{font-size:34px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
  .admin-login-row{flex-direction:column}.admin-row{flex-direction:column;align-items:flex-start}.admin-cancel-btn{width:100%}
 }
+
+/* Guias recolhíveis do agendamento e catálogo */
+.accordion-guide{
+  width:100%;
+  margin-top:16px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 5px 18px rgba(40,30,20,.05);
+  overflow:hidden;
+}
+.accordion-guide-btn{
+  width:100%;
+  border:0;
+  background:transparent;
+  padding:15px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  cursor:pointer;
+  color:var(--primary-dark);
+  font-family:var(--serif);
+  font-size:18px;
+  font-weight:600;
+  text-align:left;
+}
+.accordion-guide-btn span:first-child{display:flex;align-items:center;gap:10px}
+.accordion-guide-icon{
+  width:30px;height:30px;border-radius:10px;
+  background:var(--soft);display:grid;place-items:center;
+  font-family:Arial,sans-serif;font-size:15px;
+}
+.accordion-arrow{
+  font-family:Arial,sans-serif;font-size:22px;line-height:1;
+  transition:transform .25s ease;
+}
+.accordion-guide.open .accordion-arrow{transform:rotate(180deg)}
+.accordion-guide-content{
+  display:none;
+  padding:0 14px 14px;
+}
+.accordion-guide.open .accordion-guide-content{display:block}
+.accordion-guide-content .calendar-box,
+.accordion-guide-content .catalog-card{
+  margin-top:0 !important;
+  box-shadow:none;
+}
+
 </style>
 </head>
 <body>
 <header>
   <div class="container nav">
     <a class="logo" href="#"><span class="logo-mark">V</span> Vitória Vieira</a>
-    <a class="catalog-nav-link" href="#catalogo-servicos">Catálogo de serviços</a>
+    <a class="catalog-nav-link" href="#catalogo-servicos" onclick="setTimeout(()=>{const e=document.getElementById('catalogo-servicos');if(e&&!e.classList.contains('open'))e.classList.add('open')},0)">Catálogo de serviços</a>
     <nav><a href="#agenda">Serviços</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#contato">Contato</a></nav>
   </div>
 </header>
@@ -271,7 +320,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
       <h4>Agendamentos</h4>
       <button type="button" class="admin-refresh" onclick="loadAdminBookings()">Atualizar</button>
     </div>
-    <div id="adminList"></div>
+    <div id="adminAgendaList"></div>
   </div>
   </div>
 </div>
@@ -312,6 +361,12 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
           <li><b>3.</b> Não esqueça de finalizar para validar seu agendamento!</li>
         </ol>
       </div>
+      <div class="accordion-guide" id="agendarAqui">
+        <button type="button" class="accordion-guide-btn" onclick="toggleAccordion('agendarAqui')">
+          <span><span class="accordion-guide-icon">📅</span>Agendar aqui</span>
+          <span class="accordion-arrow">⌄</span>
+        </button>
+        <div class="accordion-guide-content">
       <div class="calendar-box" style="margin-top:16px">
         <div class="calendar-top">
           <button class="month-btn" id="prev">‹</button><h3 id="monthTitle"></h3><button class="month-btn" id="next">›</button>
@@ -337,7 +392,15 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
           <input type="hidden" id="phone">
         </div>
       </div>
-    <div class="catalog-card" id="catalogo-servicos">
+        </div>
+      </div>
+    <div class="accordion-guide" id="catalogo-servicos">
+      <button type="button" class="accordion-guide-btn" onclick="toggleAccordion('catalogo-servicos')">
+        <span><span class="accordion-guide-icon">✨</span>Catálogo de serviços</span>
+        <span class="accordion-arrow">⌄</span>
+      </button>
+      <div class="accordion-guide-content">
+    <div class="catalog-card">
       <div class="catalog-eyebrow">Nossos serviços</div>
       <h3>Catálogo de serviços</h3>
       <p>Toque em um serviço para já marcá-lo no seu agendamento ao lado. (Fotos de referência — substitua pelas fotos reais dos seus trabalhos quando quiser.)</p>
@@ -353,6 +416,7 @@ footer{padding:30px 0;color:#a8987f;font-size:13px;text-align:center;font-family
       </div>
       <div class="catalog-note">Valor promocional de lançamento: R$ 100 por serviço.</div>
     </div>
+      </div>
     </div>
   </div>
 </section>
@@ -756,6 +820,13 @@ function renderAdminCalendar(items){
     note.textContent="Nenhum agendamento confirmado para este dia.";
     list.prepend(note);
   }
+}
+
+
+function toggleAccordion(id){
+  const box=document.getElementById(id);
+  if(!box)return;
+  box.classList.toggle("open");
 }
 
 function changeAdminAgendaDay(delta){
