@@ -399,13 +399,22 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
 
     <div class="professional-agenda">
       <div class="professional-agenda-top">
-        <button type="button" class="admin-nav-btn" onclick="changeAdminAgendaDay(-1)" aria-label="Dia anterior">‹</button>
         <div class="professional-agenda-date">
           <span>AGENDA DO DIA</span>
           <strong id="adminAgendaDate">Hoje</strong>
           <small id="adminAgendaSummary">Carregando...</small>
         </div>
-        <button type="button" class="admin-nav-btn" onclick="changeAdminAgendaDay(1)" aria-label="Próximo dia">›</button>
+        <button type="button" class="agenda-pick-btn" id="adminAgendaPickBtn" onclick="toggleAdminAgendaCalendar()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M8 3v4M16 3v4M3.5 10h17"/></svg>
+          Escolher dia
+        </button>
+      </div>
+      <div class="agenda-cal-popover" id="adminAgendaCalPopover">
+        <div class="calendar-top">
+          <button class="month-btn" type="button" id="adminAgendaCalPrev">‹</button><h3 id="adminAgendaCalMonthTitle"></h3><button class="month-btn" type="button" id="adminAgendaCalNext">›</button>
+        </div>
+        <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
+        <div class="days" id="adminAgendaCalDays"></div>
       </div>
       <div class="professional-agenda-header">
         <span>HORÁRIO</span><span>CLIENTE / SERVIÇO</span><span>STATUS</span>
@@ -1061,6 +1070,53 @@ function changeAdminAgendaDay(delta){
   adminAgendaDate.setDate(adminAgendaDate.getDate()+delta);
   if(adminKey)loadAdminBookings();
 }
+
+let adminAgendaCalCurrent=new Date(); adminAgendaCalCurrent.setDate(1);
+function renderAdminAgendaCalendar(){
+  const y=adminAgendaCalCurrent.getFullYear(), m=adminAgendaCalCurrent.getMonth();
+  document.getElementById("adminAgendaCalMonthTitle").textContent=monthNames[m]+" de "+y;
+  const wrap=document.getElementById("adminAgendaCalDays"); wrap.innerHTML="";
+  const first=new Date(y,m,1).getDay();
+  const total=new Date(y,m+1,0).getDate();
+  const totalSlots=generateSlots().length;
+  const active=(adminBookingsCache||[]).filter(x=>String(x.status||"").toLowerCase()!=="cancelado");
+  const countByDate={}; active.forEach(b=>{countByDate[b.date]=(countByDate[b.date]||0)+1;});
+  for(let i=0;i<first;i++){ const e=document.createElement("div"); e.className="day empty"; wrap.appendChild(e); }
+  for(let d=1;d<=total;d++){
+    const date=new Date(y,m,d); date.setHours(0,0,0,0);
+    const dateKey=isoDate(date), count=countByDate[dateKey]||0;
+    const isToday=date.getTime()===today.getTime(), isSelected=date.getTime()===adminAgendaDate.getTime();
+    const b=document.createElement("button");
+    b.type="button"; b.className="day"; b.textContent=String(d);
+    b.setAttribute("aria-label",date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}));
+    b.classList.add(count>=totalSlots?"full":(count>0?"available":""));
+    b.onclick=()=>pickAdminAgendaDay(date);
+    if(isSelected)b.classList.add("selected");
+    if(isToday)b.classList.add("today");
+    wrap.appendChild(b);
+  }
+}
+function pickAdminAgendaDay(date){
+  adminAgendaDate=date;
+  if(adminKey)loadAdminBookings();
+  closeAdminAgendaCalendar();
+}
+function toggleAdminAgendaCalendar(){
+  const pop=document.getElementById("adminAgendaCalPopover");
+  if(pop.classList.contains("open")){ closeAdminAgendaCalendar(); return; }
+  adminAgendaCalCurrent=new Date(adminAgendaDate.getFullYear(),adminAgendaDate.getMonth(),1);
+  renderAdminAgendaCalendar();
+  pop.classList.add("open");
+}
+function closeAdminAgendaCalendar(){document.getElementById("adminAgendaCalPopover").classList.remove("open")}
+document.getElementById("adminAgendaCalPrev").onclick=()=>{adminAgendaCalCurrent.setMonth(adminAgendaCalCurrent.getMonth()-1);renderAdminAgendaCalendar()}
+document.getElementById("adminAgendaCalNext").onclick=()=>{adminAgendaCalCurrent.setMonth(adminAgendaCalCurrent.getMonth()+1);renderAdminAgendaCalendar()}
+document.addEventListener("click",(e)=>{
+  const pop=document.getElementById("adminAgendaCalPopover");
+  if(!pop.classList.contains("open"))return;
+  if(pop.contains(e.target)||e.target.closest("#adminAgendaPickBtn"))return;
+  closeAdminAgendaCalendar();
+});
 
 async function cancelBooking(row){
   if(!confirm("Cancelar esse agendamento e liberar o horário?"))return;
