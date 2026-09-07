@@ -477,6 +477,13 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
         <div class="time-popover" id="timePopover">
           <div class="tp-head"><h4>Horários — <span id="tpDate"></span></h4><button type="button" class="tp-close" onclick="closeTimePopover()">✕</button></div>
           <div class="tp-slots" id="tpSlots"></div>
+          <div class="tp-custom">
+            <label for="customTime">Não achou o horário? Digite manualmente:</label>
+            <div class="tp-custom-row">
+              <input type="time" id="customTime" step="1800">
+              <button type="button" class="tp-confirm" onclick="confirmCustomTime()">OK</button>
+            </div>
+          </div>
         </div>
         <div class="booking-form">
           <input type="hidden" id="dateField">
