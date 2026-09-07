@@ -724,7 +724,7 @@ async function renderAgendaCalendar(){
     b.type="button"; b.className="day"; b.textContent=String(d);
     b.setAttribute("aria-label",date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}));
     if(isPast||isSunday){ b.classList.add("disabled"); b.disabled=true; }
-    else { b.classList.add(count>=totalSlots?"full":(count>0?"available":"")); b.onclick=()=>pickAgendaDay(date); }
+    else { const cls=count>=totalSlots?"full":(count>0?"available":null); if(cls)b.classList.add(cls); b.onclick=()=>pickAgendaDay(date); }
     if(isSelected)b.classList.add("selected");
     if(isToday)b.classList.add("today");
     wrap.appendChild(b);
@@ -1089,7 +1089,7 @@ function renderAdminAgendaCalendar(){
     const b=document.createElement("button");
     b.type="button"; b.className="day"; b.textContent=String(d);
     b.setAttribute("aria-label",date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}));
-    b.classList.add(count>=totalSlots?"full":(count>0?"available":""));
+    const cls=count>=totalSlots?"full":(count>0?"available":null); if(cls)b.classList.add(cls);
     b.onclick=()=>pickAdminAgendaDay(date);
     if(isSelected)b.classList.add("selected");
     if(isToday)b.classList.add("today");
