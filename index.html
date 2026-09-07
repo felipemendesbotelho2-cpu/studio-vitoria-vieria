@@ -863,7 +863,7 @@ async function book(){
      const result=await res.json();
      btn.textContent=original; btn.disabled=false;
      if(!result.success){
-       showToast("Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
+       showToast(result.message||"Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
        closeBookingModal();
        openTimePopover();
        return;
