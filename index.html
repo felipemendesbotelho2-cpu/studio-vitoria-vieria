@@ -60,12 +60,14 @@ nav{display:flex;gap:26px;color:var(--muted);font-size:17px;font-weight:600}
 .agenda-pick-btn svg{width:16px;height:16px;flex-shrink:0}
 .agenda-cal-popover{display:none;position:relative;z-index:20;background:rgba(15,12,8,.75);border:1px solid rgba(227,187,82,.25);border-radius:20px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
 .agenda-cal-popover.open{display:block}
-.da-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 4px;border-radius:13px;border:1px solid rgba(76,154,112,.4);background:rgba(76,154,112,.14);text-align:center}
+.da-slot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 4px;border-radius:13px;border:1px solid rgba(76,154,112,.4);background:rgba(76,154,112,.14);text-align:center;font:inherit;width:100%}
 .da-dot{display:none}
 .da-time{font-size:16px;font-weight:800;width:auto;color:#6fcf97}
 .da-status{font-size:13px;color:#6fcf97}
-.da-slot.busy{border-color:rgba(226,87,74,.4);background:rgba(226,87,74,.14)}
+.da-slot.busy{border-color:rgba(226,87,74,.4);background:rgba(226,87,74,.14);cursor:not-allowed}
 .da-slot.busy .da-time,.da-slot.busy .da-status{color:#e2574a}
+.da-slot.free{cursor:pointer;transition:transform .12s,background .15s,border-color .15s}
+.da-slot.free:hover{background:rgba(76,154,112,.28);border-color:#6fcf97;transform:translateY(-2px)}
 .da-loading{color:var(--muted);font-size:16px;text-align:center;padding:14px 0;grid-column:1/-1}
 h1{font-family:var(--serif);font-weight:600;font-size:clamp(48px,7vw,76px);line-height:1.05;letter-spacing:-1px;margin-bottom:20px}
 h1 span{font-style:italic;color:var(--primary)}
@@ -371,7 +373,7 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
     <a class="logo" href="#"><span class="logo-mark">V</span> Vitória Vieira</a>
     <div class="header-guide-links">
       <a class="catalog-nav-link" href="#catalogo-servicos" onclick="openGuideFromHeader('catalogo-servicos');return false">✨ Catálogo de serviços</a>
-      <a class="catalog-nav-link agenda-nav-link" href="#agendarAqui" onclick="openGuideFromHeader('agendarAqui');return false">📅 Agenda aqui</a>
+      <a class="catalog-nav-link agenda-nav-link" href="#dayAgenda" onclick="document.getElementById('dayAgenda').scrollIntoView({behavior:'smooth',block:'start'});return false">📅 Agenda aqui</a>
     </div>
     <nav><a href="#agenda">Serviços</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#contato">Contato</a></nav>
   </div>
@@ -452,47 +454,20 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
           <div class="days" id="agendaCalDays"></div>
         </div>
         <div class="day-agenda-timeline" id="dayAgendaList"></div>
-      </div>
-      <div class="howto">
-        <strong>Como agendar em 3 passos</strong>
-        <ol>
-          <li><b>1.</b> Clique no dia desejado no calendário.</li>
-          <li><b>2.</b> Escolha o horário e preencha seus dados e o serviço.</li>
-          <li><b>3.</b> Não esqueça de finalizar para validar seu agendamento!</li>
-        </ol>
-      </div>
-      <div class="accordion-guide" id="agendarAqui">
-        <button type="button" class="accordion-guide-btn" onclick="toggleAccordion('agendarAqui')">
-          <span><span class="accordion-guide-icon">📅</span>Agendar aqui</span>
-          <span class="accordion-arrow">⌄</span>
-        </button>
-        <div class="accordion-guide-content">
-      <div class="calendar-box" style="margin-top:16px">
-        <div class="calendar-top">
-          <button class="month-btn" id="prev">‹</button><h3 id="monthTitle"></h3><button class="month-btn" id="next">›</button>
-        </div>
-        <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
-        <div class="days" id="days"></div>
-        <div class="calendar-legend"><span class="free"><i></i>Dia com horários livres</span><span class="busy"><i></i>Dia lotado</span></div>
-        <div class="time-popover" id="timePopover">
-          <div class="tp-head"><h4>Horários — <span id="tpDate"></span></h4><button type="button" class="tp-close" onclick="closeTimePopover()">✕</button></div>
-          <div class="tp-slots" id="tpSlots"></div>
-          <div class="tp-custom">
-            <label for="customTime">Não achou o horário? Digite manualmente:</label>
-            <div class="tp-custom-row">
-              <input type="time" id="customTime" step="1800">
-              <button type="button" class="tp-confirm" onclick="confirmCustomTime()">OK</button>
-            </div>
-          </div>
-        </div>
-        <div class="booking-form">
+        <div style="display:none">
           <input type="hidden" id="dateField">
           <input type="hidden" id="time">
           <input type="hidden" id="name">
           <input type="hidden" id="phone">
         </div>
       </div>
-        </div>
+      <div class="howto">
+        <strong>Como agendar em 3 passos</strong>
+        <ol>
+          <li><b>1.</b> Clique em um horário livre na agenda do dia (ou toque em "Ver outro dia" para escolher outra data).</li>
+          <li><b>2.</b> Escolha o serviço no catálogo e preencha seus dados.</li>
+          <li><b>3.</b> Não esqueça de finalizar para validar seu agendamento!</li>
+        </ol>
       </div>
     <div class="accordion-guide" id="catalogo-servicos">
       <button type="button" class="accordion-guide-btn" onclick="toggleAccordion('catalogo-servicos')">
@@ -654,8 +629,6 @@ function syncServiceUI(){
    document.getElementById("serviceTotalDuration").textContent=formatDuration(totalMins);
  }
 }
-let current=new Date(); current.setDate(1);
-let selected=null;
 const today=new Date(); today.setHours(0,0,0,0);
 let agendaViewDate=today;
 let agendaCalCurrent=new Date(); agendaCalCurrent.setDate(1);
@@ -681,32 +654,6 @@ async function fetchAllBookings(force=false){
    finally{ bookingsRequest=null; }
  })();
  return bookingsRequest;
-}
-async function renderCalendar(){
- const y=current.getFullYear(), m=current.getMonth();
- document.getElementById("monthTitle").textContent=monthNames[m]+" "+y;
- const days=document.getElementById("days"); days.innerHTML="";
- const first=new Date(y,m,1).getDay();
- const total=new Date(y,m+1,0).getDate();
- const totalSlots=generateSlots().length;
- const allBookings=await fetchAllBookings();
- const countByDate={};
- allBookings.forEach(b=>{ if(b.status==="Cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
- for(let i=0;i<first;i++){let e=document.createElement("div");e.className="day empty";days.appendChild(e)}
- for(let d=1;d<=total;d++){
-   let date=new Date(y,m,d);date.setHours(0,0,0,0);
-   let b=document.createElement("button");b.className="day";b.textContent=d;
-   const isPast=date<today, isSunday=date.getDay()===0;
-   if(isPast||isSunday){
-     b.classList.add("disabled");
-   }else{
-     const count=countByDate[isoDate(date)]||0;
-     b.classList.add(count>=totalSlots?"full":"available");
-     b.onclick=()=>selectDate(date);
-   }
-   if(selected&&date.getTime()===selected.getTime())b.classList.add("selected");
-   days.appendChild(b);
- }
 }
 function isoDate(d){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`}
 async function renderAgendaCalendar(){
@@ -758,14 +705,6 @@ document.addEventListener("click",(e)=>{
  if(pop.contains(e.target)||e.target.closest("#agendaPickBtn"))return;
  closeAgendaCalendar();
 });
-function selectDate(date){
- selected=date;
- document.getElementById("dateField").value=date.toLocaleDateString("pt-BR");
- document.getElementById("time").value="";
- renderCalendar();
- openTimePopover();
- renderDayAgenda(date);
-}
 function generateSlots(){
  const arr=[];
  for(let h=8;h<=16;h++){ arr.push(String(h).padStart(2,"0")+":00"); }
@@ -790,53 +729,11 @@ async function fetchBookedTimes(date){
    return intervals.some(iv=>tMin>=iv.start && tMin<iv.end);
  });
 }
-function renderSlots(){
- const wrap=document.getElementById("tpSlots"); wrap.innerHTML="";
- const selDuration=calcServiceDuration(document.getElementById("service").value)||60;
- generateSlots().forEach(t=>{
-   const b=document.createElement("button");
-   b.type="button"; b.className="tp-slot"; b.textContent=t;
-   const tMin=timeToMin(t), endMin=tMin+selDuration;
-   const conflict=dayIntervals.some(iv=>intervalsOverlap(tMin,endMin,iv.start,iv.end));
-   if(conflict){
-     b.classList.add("taken"); b.disabled=true; b.title="Horário ocupado ou não cabe antes do próximo agendamento";
-   }else{
-     if(document.getElementById("time").value===t) b.classList.add("active");
-     b.onclick=()=>chooseTime(t);
-   }
-   wrap.appendChild(b);
- });
- document.getElementById("customTime").value="";
-}
-async function openTimePopover(){
- document.getElementById("tpDate").textContent=document.getElementById("dateField").value;
- document.getElementById("timePopover").classList.add("open");
- const wrap=document.getElementById("tpSlots"); wrap.innerHTML='<div class="tp-loading">Carregando horários...</div>';
- dayIntervals=await fetchDayIntervals(selected);
- bookedForDay=generateSlots().filter(t=>{const tMin=timeToMin(t); return dayIntervals.some(iv=>tMin>=iv.start&&tMin<iv.end);});
- renderSlots();
-}
-function closeTimePopover(){document.getElementById("timePopover").classList.remove("open")}
-function chooseTime(t){document.getElementById("time").value=t;closeTimePopover();openBookingModal()}
-function confirmCustomTime(){
- const v=document.getElementById("customTime").value;
- if(!v){showToast("Escolha um horário para continuar.");return}
- const selDuration=calcServiceDuration(document.getElementById("service").value)||60;
- const vMin=timeToMin(v), vEnd=vMin+selDuration;
- const conflict=dayIntervals.some(iv=>intervalsOverlap(vMin,vEnd,iv.start,iv.end));
- if(conflict){showToast("Esse horário já está ocupado ou não cabe antes do próximo agendamento. Escolha outro.");return}
- document.getElementById("time").value=v;
- closeTimePopover();
+function pickDayAgendaTime(t){
+ document.getElementById("dateField").value=agendaViewDate.toLocaleDateString("pt-BR");
+ document.getElementById("time").value=t;
  openBookingModal();
 }
-document.addEventListener("click",(e)=>{
- const pop=document.getElementById("timePopover");
- if(!pop.classList.contains("open"))return;
- if(pop.contains(e.target)||e.target.closest("#time")||e.target.classList.contains("day"))return;
- closeTimePopover();
-});
-document.getElementById("prev").onclick=()=>{current.setMonth(current.getMonth()-1);renderCalendar()}
-document.getElementById("next").onclick=()=>{current.setMonth(current.getMonth()+1);renderCalendar()}
 function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",3500)}
 function openBookingModal(){
  const date=document.getElementById("dateField").value,time=document.getElementById("time").value;
@@ -858,18 +755,17 @@ async function book(){
    const btn=document.getElementById("confirmBookBtn"); const original=btn.textContent;
    btn.textContent="Verificando horário..."; btn.disabled=true;
    try{
-     const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({date:isoDate(selected),time,name,phone,service})});
+     const res=await fetch(SHEET_API_URL,{method:"POST",body:JSON.stringify({date:isoDate(agendaViewDate),time,name,phone,service})});
      if(!res.ok) throw new Error("HTTP "+res.status);
      const result=await res.json();
      btn.textContent=original; btn.disabled=false;
      if(!result.success){
        showToast(result.message||"Esse horário acabou de ser reservado por outra pessoa. Escolha outro horário.");
        closeBookingModal();
-       openTimePopover();
+       renderDayAgenda(agendaViewDate);
        return;
      }
-     renderCalendar();
-     renderDayAgenda(selected);
+     renderDayAgenda(agendaViewDate);
    }catch(err){
      btn.textContent=original; btn.disabled=false;
      console.error("Erro ao gravar agendamento na planilha:",err);
@@ -909,14 +805,16 @@ async function renderDayAgenda(date){
  list.innerHTML="";
  generateSlots().forEach(t=>{
    const busy=booked.includes(t);
-   const row=document.createElement("div");
-   row.className="da-slot"+(busy?" busy":"");
+   const row=document.createElement(busy?"div":"button");
+   if(!busy) row.type="button";
+   row.className="da-slot"+(busy?" busy":" free");
    row.innerHTML=`<span class="da-dot"></span><span class="da-time">${t}</span><span class="da-status">${busy?"Ocupado":"Disponível"}</span>`;
+   if(!busy) row.onclick=()=>pickDayAgendaTime(t);
    list.appendChild(row);
  });
 }
 document.getElementById("whatsapp").href=`https://wa.me/5563993008899?text=${encodeURIComponent("Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.")}`;
-Promise.all([renderCalendar(), renderDayAgenda(today)]);
+renderDayAgenda(today);
 
 // ====== ÁREA DA PROFISSIONAL ======
 let adminKey=null;
@@ -1068,8 +966,7 @@ function openGuideFromHeader(id){
   if(!box)return;
   if(!box.classList.contains("open")) box.classList.add("open");
   setTimeout(()=>{
-    const target = id === "agendarAqui" ? box.querySelector(".calendar-box") : box;
-    if(target) target.scrollIntoView({behavior:"smooth",block:"start"});
+    box.scrollIntoView({behavior:"smooth",block:"start"});
   },80);
 }
 
@@ -1135,7 +1032,7 @@ async function cancelBooking(row){
       invalidateAdminCache();
       invalidateBookingsCache();
       await loadAdminBookings(true);
-      await Promise.all([renderCalendar(), renderDayAgenda(selected||today)]);
+      await renderDayAgenda(agendaViewDate||today);
     }else showToast(result.message||"Não foi possível cancelar.");
   }catch(err){
     console.error("Erro ao cancelar:",err);
