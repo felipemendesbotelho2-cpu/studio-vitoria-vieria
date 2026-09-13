@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vitória Vieira Nails & Spa</title>
-<meta name="description" content="Dê um up no seu visual. Agende seu horário na Vitória Vieira Nails & Spa e conheça nosso catálogo de serviços.">
+<title>Studio Vitória Vieira Nails & Spa</title>
+<meta name="description" content="Dê um up no seu visual. Agende seu horário no Studio Vitória Vieira Nails & Spa e conheça nosso catálogo de serviços.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -97,10 +97,10 @@ h2{font-family:var(--serif);font-size:51px;margin:5px 0 8px}
 .booking-info p{color:var(--muted);margin-bottom:18px}
 .info-list{display:grid;gap:13px}.info-list div{padding:13px;background:var(--bg);border-radius:14px;font-size:17px}
 .calendar-box{position:relative}
-.howto{background:rgba(227,187,82,.08);border:1px solid rgba(227,187,82,.28);border-radius:18px;padding:16px 18px;margin-top:16px}
-.howto strong{display:block;font-size:16.5px;color:var(--primary-dark);margin-bottom:8px;letter-spacing:.2px}
-.howto ol{margin:0;padding-left:19px;display:grid;gap:5px}
-.howto li{font-size:16px;color:var(--muted);line-height:1.45}
+.howto{background:rgba(227,187,82,.08);border:1px solid rgba(227,187,82,.28);border-radius:14px;padding:10px 13px;margin-top:12px}
+.howto strong{display:block;font-size:14px;color:var(--primary-dark);margin-bottom:5px;letter-spacing:.2px}
+.howto ol{margin:0;padding-left:16px;display:grid;gap:3px}
+.howto li{font-size:13.5px;color:var(--muted);line-height:1.35}
 .howto li b{color:var(--text)}
 .catalog-card{background:rgba(15,12,8,.55);backdrop-filter:blur(9px);border:1px solid var(--line);border-radius:34px;box-shadow:var(--shadow);padding:32px;min-height:520px;position:relative;overflow:hidden}
 .catalog-card::before{content:"";position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(227,187,82,.14) 0%,transparent 70%)}
@@ -140,7 +140,14 @@ h2{font-family:var(--serif);font-size:51px;margin:5px 0 8px}
 .month-btn{border:1px solid var(--line);background:rgba(255,255,255,.06);width:36px;height:36px;border-radius:10px;cursor:pointer}
 .weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
 .weekdays div{text-align:center;font-size:13.5px;color:var(--muted);font-weight:800;padding:6px 0}
-.day{min-height:43px;border:1px solid rgba(227,187,82,.14);background:rgba(255,255,255,.05);border-radius:10px;cursor:pointer;color:var(--text)}
+.day{min-height:43px;border:1px solid rgba(227,187,82,.14);background:rgba(255,255,255,.05);border-radius:10px;cursor:pointer;color:var(--text);position:relative}
+.day.loading{opacity:.45;cursor:wait}
+.day-badge{position:absolute;top:2px;right:3px;font-size:10px;font-weight:800;line-height:1.3;color:var(--primary-dark);background:rgba(0,0,0,.4);border-radius:999px;padding:0 4px;pointer-events:none}
+.day.full .day-badge{color:#ffd7cf}
+.day.available .day-badge{color:#c8f2dc}
+.cal-status{grid-column:1/-1;text-align:center;font-size:13.5px;color:var(--muted);padding:4px 0 10px;display:flex;align-items:center;justify-content:center;gap:7px}
+.cal-status::before{content:"";width:13px;height:13px;border-radius:50%;border:2px solid rgba(227,187,82,.35);border-top-color:var(--primary);animation:cal-spin .7s linear infinite}
+@keyframes cal-spin{to{transform:rotate(360deg)}}
 .day:hover{border-color:var(--primary)}.day.empty{border:0;background:transparent;cursor:default}
 .day.selected{background:var(--primary);color:#1a1509;border-color:var(--primary);font-weight:800}
 .day.disabled{color:#4d4630;background:rgba(255,255,255,.02);cursor:not-allowed}
@@ -170,7 +177,7 @@ input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(2
 .contact p{color:#cbbb9d}.contact .hero-btn{background:#fff;color:var(--primary-dark)}
 footer{padding:30px 0;color:#a8987f;font-size:16px;text-align:center;font-family:var(--serif);letter-spacing:.5px}
 #painel-profissional{padding:14px 0 4px}
-.admin-toggle{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:rgba(227,187,82,.12);color:var(--primary-dark);padding:10px 18px;border-radius:999px;font-weight:700;font-size:17px;border:1px solid rgba(227,187,82,.32);white-space:nowrap;text-decoration:none;transition:.2s ease;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.admin-toggle{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(227,187,82,.12);color:var(--primary-dark);padding:6px 12px;border-radius:999px;font-weight:600;font-size:13px;border:1px solid rgba(227,187,82,.32);white-space:nowrap;text-decoration:none;transition:.2s ease;box-shadow:0 3px 10px rgba(0,0,0,.35)}
 .admin-toggle:hover{background:var(--primary);color:#1a1509;border-color:var(--primary);transform:translateY(-1px)}
 .admin-box{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.5);padding:14px 16px;max-width:280px;margin-top:8px}
 .admin-box>p{color:var(--muted);font-size:14.5px;margin-bottom:10px}
@@ -370,10 +377,9 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
 <body>
 <header>
   <div class="container nav">
-    <a class="logo" href="#"><span class="logo-mark">V</span> Vitória Vieira</a>
+    <a class="logo" href="#"><span class="logo-mark">V</span> Studio Vitória Vieira</a>
     <div class="header-guide-links">
       <a class="catalog-nav-link" href="#catalogo-servicos" onclick="openGuideFromHeader('catalogo-servicos');return false">✨ Catálogo de serviços</a>
-      <a class="catalog-nav-link agenda-nav-link" href="#dayAgenda" onclick="document.getElementById('dayAgenda').scrollIntoView({behavior:'smooth',block:'start'});return false">📅 Agenda aqui</a>
     </div>
     <nav><a href="#agenda">Serviços</a><a href="#agenda">Agenda</a><a href="#galeria">Galeria</a><a href="#contato">Contato</a></nav>
   </div>
@@ -432,6 +438,14 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
 <section class="hero" id="agenda">
   <div class="container hero-grid">
     <div>
+      <div class="howto">
+        <strong>Como agendar em 3 passos</strong>
+        <ol>
+          <li><b>1.</b> Clique em um horário livre na agenda do dia (ou toque em "Ver outro dia" para escolher outra data).</li>
+          <li><b>2.</b> Escolha o serviço no catálogo e preencha seus dados.</li>
+          <li><b>3.</b> Não esqueça de finalizar para validar seu agendamento!</li>
+        </ol>
+      </div>
       <div class="day-agenda" id="dayAgenda">
         <div class="day-agenda-head">
           <div>
@@ -450,6 +464,7 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
           <div class="calendar-top">
             <button class="month-btn" type="button" id="agendaCalPrev">‹</button><h3 id="agendaCalMonthTitle"></h3><button class="month-btn" type="button" id="agendaCalNext">›</button>
           </div>
+          <div class="cal-status" id="agendaCalStatus" style="display:none"></div>
           <div class="weekdays"><div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div></div>
           <div class="days" id="agendaCalDays"></div>
         </div>
@@ -460,14 +475,6 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
           <input type="hidden" id="name">
           <input type="hidden" id="phone">
         </div>
-      </div>
-      <div class="howto">
-        <strong>Como agendar em 3 passos</strong>
-        <ol>
-          <li><b>1.</b> Clique em um horário livre na agenda do dia (ou toque em "Ver outro dia" para escolher outra data).</li>
-          <li><b>2.</b> Escolha o serviço no catálogo e preencha seus dados.</li>
-          <li><b>3.</b> Não esqueça de finalizar para validar seu agendamento!</li>
-        </ol>
       </div>
     <div class="accordion-guide" id="catalogo-servicos">
       <button type="button" class="accordion-guide-btn" onclick="toggleAccordion('catalogo-servicos')">
@@ -500,8 +507,8 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
 <section id="info-strip">
 <div class="container">
   <div class="info-list" style="grid-template-columns:repeat(3,1fr)">
-    <div>📍 Rua Exemplo, 123 — Centro</div>
-    <div>🕘 Segunda a sábado — 09h às 19h</div>
+    <div>📍 1106 Sul, Alameda 8, Lote 34</div>
+    <div>🕘 Segunda a sábado — 8h às 16h</div>
     <div>📲 Confirmação do agendamento pelo WhatsApp</div>
   </div>
 </div>
@@ -516,11 +523,11 @@ header,.admin-box,.agenda-cal-popover,.time-popover,.day-agenda,.booking-info,.c
 
 <section id="contato">
 <div class="container">
- <div class="contact"><div><div class="eyebrow" style="color:#e8c99a">Vamos conversar?</div><h2 style="color:#fff">Agende seu horário</h2><p>Fale com a Vitória Vieira Nails & Spa pelo WhatsApp e confirme seu atendimento.</p></div><a class="hero-btn" id="whatsapp" href="#" target="_blank">WhatsApp</a></div>
+ <div class="contact"><div><div class="eyebrow" style="color:#e8c99a">Vamos conversar?</div><h2 style="color:#fff">Agende seu horário</h2><p>Fale com o Studio Vitória Vieira Nails & Spa pelo WhatsApp e confirme seu atendimento.</p></div><a class="hero-btn" id="whatsapp" href="#" target="_blank">WhatsApp</a></div>
 </div>
 </section>
 </main>
-<footer>© 2026 Vitória Vieira Nails & Spa • Todos os direitos reservados. • <a href="#painel-profissional" onclick="document.getElementById('adminBoxWrap').style.display='block'" style="color:inherit;text-decoration:underline">Área exclusiva</a></footer>
+<footer>© 2026 Studio Vitória Vieira Nails & Spa • Todos os direitos reservados. • <a href="#painel-profissional" onclick="document.getElementById('adminBoxWrap').style.display='block'" style="color:inherit;text-decoration:underline">Área exclusiva</a></footer>
 <div class="toast" id="toast"></div>
 
 <div class="modal-overlay" id="bookingModal">
@@ -660,29 +667,53 @@ async function renderAgendaCalendar(){
   const y=agendaCalCurrent.getFullYear(), m=agendaCalCurrent.getMonth();
   document.getElementById("agendaCalMonthTitle").textContent=monthNames[m]+" de "+y;
   const wrap=document.getElementById("agendaCalDays"); wrap.innerHTML="";
+  const statusEl=document.getElementById("agendaCalStatus");
   const first=new Date(y,m,1).getDay();
   const total=new Date(y,m+1,0).getDate();
   const totalSlots=generateSlots().length;
-  const allBookings=await fetchAllBookings();
-  const countByDate={};
-  allBookings.forEach(b=>{ if(String(b.status||"").toLowerCase()==="cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
+
   for(let i=0;i<first;i++){
     const e=document.createElement("div"); e.className="day empty"; wrap.appendChild(e);
   }
   for(let d=1;d<=total;d++){
     const date=new Date(y,m,d); date.setHours(0,0,0,0);
-    const dateKey=isoDate(date), count=countByDate[dateKey]||0;
     const isPast=date.getTime()<today.getTime(), isSunday=date.getDay()===0;
     const isToday=date.getTime()===today.getTime(), isSelected=date.getTime()===agendaViewDate.getTime();
     const b=document.createElement("button");
-    b.type="button"; b.className="day"; b.textContent=String(d);
+    b.type="button"; b.className="day loading"; b.textContent=String(d);
+    b.dataset.date=isoDate(date);
     b.setAttribute("aria-label",date.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long",year:"numeric"}));
-    if(isPast||isSunday){ b.classList.add("disabled"); b.disabled=true; }
-    else { const cls=count>=totalSlots?"full":(count>0?"available":null); if(cls)b.classList.add(cls); b.onclick=()=>pickAgendaDay(date); }
+    b.disabled=true;
+    if(isPast||isSunday) b.classList.add("disabled");
     if(isSelected)b.classList.add("selected");
     if(isToday)b.classList.add("today");
     wrap.appendChild(b);
   }
+
+  if(statusEl){ statusEl.style.display="flex"; statusEl.textContent="Carregando disponibilidade..."; }
+
+  const allBookings=await fetchAllBookings();
+  const countByDate={};
+  allBookings.forEach(b=>{ if(String(b.status||"").toLowerCase()==="cancelado") return; countByDate[b.date]=(countByDate[b.date]||0)+1; });
+
+  wrap.querySelectorAll(".day[data-date]").forEach(btn=>{
+    const dateKey=btn.dataset.date, count=countByDate[dateKey]||0, date=new Date(dateKey+"T00:00:00");
+    btn.classList.remove("loading");
+    if(!btn.classList.contains("disabled")){
+      btn.disabled=false;
+      btn.onclick=()=>pickAgendaDay(date);
+      const cls=count>=totalSlots?"full":(count>0?"available":null);
+      if(cls)btn.classList.add(cls);
+    }
+    if(count>0){
+      const badge=document.createElement("span");
+      badge.className="day-badge";
+      badge.textContent=String(count);
+      btn.appendChild(badge);
+    }
+  });
+
+  if(statusEl) statusEl.style.display="none";
 }
 function pickAgendaDay(date){
  agendaViewDate=date;
@@ -813,7 +844,7 @@ async function renderDayAgenda(date){
    list.appendChild(row);
  });
 }
-document.getElementById("whatsapp").href=`https://wa.me/5563993008899?text=${encodeURIComponent("Olá! Quero agendar um horário na Vitória Vieira Nails & Spa.")}`;
+document.getElementById("whatsapp").href=`https://wa.me/5563993008899?text=${encodeURIComponent("Olá! Quero agendar um horário no Studio Vitória Vieira Nails & Spa.")}`;
 renderDayAgenda(today);
 
 // ====== ÁREA DA PROFISSIONAL ======
